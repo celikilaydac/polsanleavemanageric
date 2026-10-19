@@ -1,25 +1,69 @@
 # Architecture
 
-> **Template — filled during bootstrap.** Describe the architecture you *decided on*, not an
-> aspiration. Agents read this file before planning; vague answers here become vague code.
-
 ## System overview
-<!-- 3–6 sentences: what the system is, its architectural style (monolith / modular monolith /
-services / etc.), and the one-line reason for that choice (link the ADR). -->
+PolsanIzin, Polsan çalışanlarının izin taleplerini oluşturduğu, yöneticilerin onaylayıp
+reddettiği ve İK'nın bakiye ve talepleri izlediği bir web uygulamasıdır. Eğitim projesidir;
+gerçek kişisel veri kullanılmaz, hedef ölçek 50–500 kullanıcıdır. Mimari tarz **modüler
+monolittir**: tek uygulama, tek SQLite veritabanı, içinde derleyici ve mimari testlerle korunan
+modül sınırları ([ADR 0001](decisions/0001-moduler-monolit.md)). Teknoloji: .NET 10, ASP.NET Core
+Razor Pages, EF Core + SQLite ([ADR 0002](decisions/0002-teknoloji-yigini.md)).
+
+### Solution yapısı
+```
+PolsanIzin.slnx
+src/
+  PolsanIzin.Calisanlar/    class library
+  PolsanIzin.Takvim/        class library
+  PolsanIzin.Bakiyeler/     class library
+  PolsanIzin.Izinler/       class library
+  PolsanIzin.Web/           Razor Pages — giriş noktası, composition root
+tests/
+  PolsanIzin.<Modul>.Tests/ her modüle bir birim test projesi
+  PolsanIzin.Mimari.Tests/  mimari kural testleri (YB-1…YB-5)
+  PolsanIzin.Web.Tests/     entegrasyon testleri (WebApplicationFactory)
+```
 
 ## Modules / components and ownership
-<!-- One row per module: single responsibility + the data it owns (conceptual, not table-level). -->
 
 | Module | Single responsibility | Owns |
 |---|---|---|
-| | | |
+| `Calisanlar` | Çalışan kimliği, roller (Çalışan / Yönetici / İK), çalışan → yönetici bağı, kimlik bilgisi doğrulama | Çalışan, rol, yönetici bağı, parola hash'i |
+| `Takvim` | İş günü hesabı ve resmi tatiller (BR-1) | Resmi tatil listesi |
+| `Bakiyeler` | İzin hakkı ve bakiye; rezerve / kesinleştir / serbest bırak (BR-2, BR-9, BR-10); bakiye asla negatif olmaz | İzin hakkı, bakiye hareketleri |
+| `Izinler` | İzin talebinin yaşam döngüsü: oluştur, onayla, reddet, iptal (BR-2…BR-9); denetim izi | İzin talebi, durum geçmişi |
+| `Web` | Razor Pages ekranları, kimlik doğrulama (cookie), yetki policy'leri; **iş kuralı içermez** | (veri sahibi değil) |
 
 ## Communication rules
-<!-- When is a direct call allowed, when an event/message, when is it forbidden? -->
+1. Modüller arası iletişim **yalnızca public arayüz** üzerinden (ör. `IBakiyeServisi`), senkron
+   doğrudan çağrıdır. MVP'de olay/mesaj kuyruğu yoktur.
+2. Bağımlılık yönü tek yönlüdür, döngü yoktur:
+   ```
+   Web ──► Izinler ──► Calisanlar
+    │         ├──────► Takvim
+    │         └──────► Bakiyeler
+    └──► (tüm modüllerin yalnızca public arayüzleri)
+   ```
+3. Bakiye akışı: talep oluşturulunca `Izinler` → `Bakiyeler.Rezerve(...)`; onayda
+   `Kesinlestir(...)`; ret veya iptalde `SerbestBirak(...)`. "Bakiye negatif olamaz" değişmezi
+   yalnızca `Bakiyeler` içinde korunur.
+4. Her modülün **kendi `DbContext`'i ve kendi tabloları** vardır (aynı SQLite dosyası); ortak
+   DbContext yoktur. Her modül, `Web`'in başlangıçta çağırdığı bir `Kaydet(...)` (DI kayıt) uzantı
+   metodu sunar.
+5. `Web` yalnızca modül servislerini çağırır; iş kuralı, doğrulama mantığı veya sorgu yazmaz.
 
 ## Forbidden dependencies (make them testable)
-<!-- Concrete prohibitions an architecture test could assert, e.g.
-"Module A never accesses Module B's internal types or storage — only its public interface." -->
+
+| Kod | Yasak | Koruma |
+|---|---|---|
+| YB-1 | Bir modül başka bir modülün `internal` tiplerine, entity'lerine veya DbContext'ine erişemez. | Entity ve DbContext'ler `internal` — derleyici |
+| YB-2 | Proje referansları yukarıdaki grafiğin dışına çıkamaz; döngü yasak. | csproj referansları + `Mimari.Tests` |
+| YB-3 | `Calisanlar`, `Takvim`, `Bakiyeler` hiçbir başka modüle referans veremez. | `Mimari.Tests` |
+| YB-4 | Modül projeleri `Microsoft.AspNetCore.*` assembly'lerine bağımlı olamaz. | `Mimari.Tests` |
+| YB-5 | `Web`, EF Core / `DbContext`'e doğrudan erişemez (istisna: modüllerin `Kaydet(...)` çağrıları). | `Mimari.Tests` |
+
+Mimari testler ek paket olmadan reflection ile (`Assembly.GetReferencedAssemblies()`) yazılır.
 
 ## Deliberately out of scope
-<!-- Conscious non-goals for the current version. -->
+Mikroservisler · mesaj kuyruğu / olay altyapısı · dağıtık önbellek · çoklu kiracı (multi-tenant) ·
+bordro / SGK entegrasyonu · kurumsal SSO (AD / Entra ID) · mobil uygulama · çok seviyeli onay ·
+e-posta dışı bildirimler · tarayıcı tabanlı E2E testleri (bkz. `docs/testing.md`).

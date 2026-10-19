@@ -1,17 +1,39 @@
 # Testing
 
-> **Template — filled during bootstrap.**
-
 ## The contract
 - Every acceptance criterion maps to at least one test (criterion ↔ test map lives in the plan).
 - Tests assert **behavior**, not implementation details or mere status codes.
 - The whole suite runs inside `scripts/check` — one command, everywhere.
+- Kapsam yüzdesi (coverage %) eşiği yoktur; kalite kriter ↔ test eşlemesiyle ölçülür.
 
 ## Frameworks & layout
-<!-- Test framework(s), where tests live, naming pattern. -->
+- **xUnit v3**, yerleşik `Assert`. Ek assertion kütüphanesi yok.
+- **Birim testler:** `tests/PolsanIzin.<Modul>.Tests/` — her modüle bir proje. Zaman için
+  `FakeTimeProvider` (Microsoft.Extensions.TimeProvider.Testing).
+- **Mimari testler:** `tests/PolsanIzin.Mimari.Tests/` — YB-1…YB-5, reflection ile.
+- **Entegrasyon testleri:** `tests/PolsanIzin.Web.Tests/` — `WebApplicationFactory` ile süreç içi
+  gerçek HTTP istekleri, in-memory SQLite, HTML ayrıştırma için AngleSharp. Her test sınıfı
+  `[Trait("Kategori", "Entegrasyon")]` taşır.
+- **Tarayıcı E2E yok (MVP).** Razor Pages sunucu tarafı HTML ürettiği için ekran davranışları
+  entegrasyon testleriyle doğrulanır. JS ağırlıklı ekran gelirse Playwright (headless,
+  `--workers=1`) ADR ile eklenir.
+- **App-under-test yaşam döngüsü:** `WebApplicationFactory` fixture'ı sahiptir — test sınıfı için
+  süreç içinde başlatır, sonunda dispose eder; dışarıda çalışan sunucu yoktur.
+- Test adları: `Metot_Durum_BeklenenSonuc` (`docs/conventions.md`).
 
 ## What must be tested
-<!-- e.g. every business rule (BR-n), every boundary/forbidden dependency, critical flows E2E/smoke. -->
+1. Her iş kuralı (BR-1…BR-11): olumlu ve olumsuz durum. BR-1 için sınırlar: hafta sonu, resmi
+   tatil, yıl geçişi, tek günlük talep.
+2. Her domain değişmezi: bakiye negatif olamaz, son durumdan geçiş yok, denetim izi yazılır.
+3. Her yasaklı bağımlılık (YB-1…YB-5): bir mimari test.
+4. Yetki: her sayfada yetkisiz erişim reddedilir; kaynak yetkisi (BR-6, başkasının talebi)
+   doğrudan POST ile de denenir.
+5. Kritik akış (entegrasyon): giriş → talep oluştur → yönetici onaylar → bakiye düşer.
+
+## Fast / full split (bu proje)
+- Seçici: trait `Kategori`. `--fast` → `Kategori!=Entegrasyon` (birim + mimari + etiketsiz her
+  test); full-only → `Kategori=Entegrasyon`. Etiketsiz yeni test otomatik olarak fast'e girer.
+- Format kontrolü (`dotnet format --verify-no-changes`) full-only'dir.
 
 ## Protected-tests rule
 Weakening asserts, deleting, or skipping tests to reach green is forbidden. A red test triggers
