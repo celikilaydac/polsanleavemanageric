@@ -7,6 +7,10 @@
 - Refactors: `refactor/<spec-no>-<short-name>` (mini-spec with Changed behavior = none).
 - Fixes: `fix/<report-id>-<short-name>` (bug fixes carry a report, not a spec number);
   incidents: `incident/<date>-<short-name>`; trivial changes: `trivial/<short-name>` (see below).
+- İş alanı / araç değişiklikleri: `chore/<short-name>` — uygulama davranışına dokunmayan işler
+  (ANEW, CI, `docs/` kuralları, paket güncellemesi). Spec gerekmez; PR + bağımsız review +
+  `scripts/check` yeşil zorunludur. `src/` veya `tests/` altına dokunan bir chore yeniden triage
+  edilir (`workflows/change-request.md`).
 - Önekler İngilizce kalır; `<short-name>` Türkçe, ASCII, kebab-case'dir:
   `feature/0001-yillik-izin-talebi`, `trivial/buton-metni`, `incident/2026-10-20-giris-hatasi`.
 - Default branch: `main` (`origin` = `github.com/celikilaydac/polsanleavemanageric`).

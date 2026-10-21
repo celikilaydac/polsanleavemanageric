@@ -38,6 +38,11 @@
 - **BR-10:** İzin hakkını İK tanımlar. Kıdeme göre otomatik hesaplama (İş Kanunu md. 53:
   14 / 20 / 26 gün) MVP kapsamı dışıdır.
 - **BR-11:** Birim tam gündür; yarım gün izin yoktur.
+- **BR-12:** "Bugün", Europe/Istanbul saat dilimindeki takvim günüdür (sunucunun saat dilimi
+  ne olursa olsun). BR-5 ve tüm tarih kontrolleri bu güne göre yapılır.
+- **BR-13:** Bir talep iki takvim yılına yayılamaz (başlangıç ve bitiş aynı yıldadır); yıl
+  sonunu aşan izin için çalışan iki ayrı talep açar. Böylece her talep tek bir yılın bakiyesini
+  etkiler.
 
 ## Key domain invariants
 

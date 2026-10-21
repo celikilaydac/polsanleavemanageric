@@ -2,7 +2,7 @@
 
 > **PolsanIzin** — Polsan çalışanları için izin yönetimi (talep → yönetici onayı → bakiye; İK takibi).
 > Eğitim projesi, gerçek kişisel veri yok. .NET 10 + ASP.NET Core Razor Pages, EF Core + SQLite, xUnit;
-> modüler monolit (`Calisanlar`, `Takvim`, `Bakiyeler`, `Izinler`, `Web`). Kod Türkçe (ASCII).
+> modüler monolit (`Calisanlar`, `Takvim`, `Bakiyeler`, `Izinler`, `Web` + çekirdek `Ortak`). Kod Türkçe (ASCII).
 
 ## Operating mode
 

@@ -26,6 +26,9 @@
 - **AuthN:** cookie tabanlı oturum; kimlik bilgisi `Calisanlar` modülünde `PasswordHasher` ile
   hash'lenmiş parolaya karşı doğrulanır. Düz metin parola hiçbir yerde saklanmaz veya loglanmaz.
   Kurumsal SSO kapsam dışıdır (gelirse ADR ile).
+- **Kaba kuvvet koruması:** giriş POST'u ASP.NET Core yerleşik rate limiter ile IP başına
+  dakikada 10 denemeyle sınırlıdır; aşımda 429 ve genel Türkçe mesaj döner. Hesap kilitleme MVP
+  kapsamı dışıdır.
 - **Varsayılan reddet:** global `FallbackPolicy = RequireAuthenticatedUser`. Anonim erişim yalnızca
   giriş sayfası ve statik dosyalar içindir.
 - **Rol yetkisi:** `Calisan`, `Yonetici`, `Ik` rolleri sayfa seviyesinde policy ile korunur.

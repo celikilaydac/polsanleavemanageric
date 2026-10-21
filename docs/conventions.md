@@ -47,6 +47,8 @@
 - Zaman damgaları (denetim izi vb.) `DateTimeOffset`, UTC.
 - "Şimdi" / "bugün" her zaman enjekte edilen `TimeProvider` ile alınır; `DateTime.Now`,
   `DateTime.UtcNow`, `DateTimeOffset.Now` doğrudan kullanılmaz.
+- "Bugün" yalnızca `Ortak`'taki `timeProvider.Bugun()` uzantısıyla alınır (Europe/Istanbul,
+  BR-12); `DateOnly.FromDateTime(...)` ile elle dönüşüm yazılmaz.
 - Gün sayıları `int`'tir (BR-11: yarım gün yok).
 - Kimlikler `Guid`, `Guid.CreateVersion7()` ile üretilir.
 - Enum'lar veritabanında string olarak saklanır.
@@ -55,7 +57,7 @@
 - Derleyici + Roslyn analizörleri, uyarılar hata (`TreatWarningsAsErrors`), nullable kontrolü —
   `scripts/check` build adımı.
 - Kod stili `.editorconfig` + `dotnet format --verify-no-changes` — `scripts/check` format adımı.
-- Mimari sınırlar YB-1…YB-5 — derleyici (`internal`) + `PolsanIzin.Mimari.Tests`.
+- Mimari sınırlar YB-1…YB-6 — derleyici (`internal`) + `PolsanIzin.Mimari.Tests`.
 - Bilinen zafiyetli paketler — NuGetAudit (NU1901–NU1904) + `TreatWarningsAsErrors` derlemeyi kırar.
-- Review'da kontrol edilenler (henüz araçla değil): `TimeProvider` kuralı, `Sonuc` deseni, Türkçe
+- Review'da kontrol edilenler (henüz araçla değil): `TimeProvider` ve `Bugun()` kuralı, `Sonuc` deseni, Türkçe
   ASCII isimlendirme. Bir analizörle korunabildiği anda `scripts/check`'e taşınır.

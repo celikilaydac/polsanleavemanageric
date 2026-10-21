@@ -12,6 +12,7 @@ Razor Pages, EF Core + SQLite ([ADR 0002](decisions/0002-teknoloji-yigini.md)).
 ```
 PolsanIzin.slnx
 src/
+  PolsanIzin.Ortak/         class library — paylaşılan çekirdek (Sonuc, Hata, Bugun())
   PolsanIzin.Calisanlar/    class library
   PolsanIzin.Takvim/        class library
   PolsanIzin.Bakiyeler/     class library
@@ -19,7 +20,7 @@ src/
   PolsanIzin.Web/           Razor Pages — giriş noktası, composition root
 tests/
   PolsanIzin.<Modul>.Tests/ her modüle bir birim test projesi
-  PolsanIzin.Mimari.Tests/  mimari kural testleri (YB-1…YB-5)
+  PolsanIzin.Mimari.Tests/  mimari kural testleri (YB-1…YB-6)
   PolsanIzin.Web.Tests/     entegrasyon testleri (WebApplicationFactory)
 ```
 
@@ -32,6 +33,7 @@ tests/
 | `Bakiyeler` | İzin hakkı ve bakiye; rezerve / kesinleştir / serbest bırak (BR-2, BR-9, BR-10); bakiye asla negatif olmaz | İzin hakkı, bakiye hareketleri |
 | `Izinler` | İzin talebinin yaşam döngüsü: oluştur, onayla, reddet, iptal (BR-2…BR-9); denetim izi | İzin talebi, durum geçmişi |
 | `Web` | Razor Pages ekranları, kimlik doğrulama (cookie), yetki policy'leri; **iş kuralı içermez** | (veri sahibi değil) |
+| `Ortak` | Paylaşılan çekirdek: `Sonuc` / `Sonuc<T>` / `Hata`, `TimeProvider.Bugun()` (BR-12). Domain değil, altyapı tipidir | (veri sahibi değil) |
 
 ## Communication rules
 1. Modüller arası iletişim **yalnızca public arayüz** üzerinden (ör. `IBakiyeServisi`), senkron
@@ -42,6 +44,8 @@ tests/
     │         ├──────► Takvim
     │         └──────► Bakiyeler
     └──► (tüm modüllerin yalnızca public arayüzleri)
+
+   Tüm projeler ──► Ortak   (Ortak hiçbir projeye referans vermez)
    ```
 3. Bakiye akışı: talep oluşturulunca `Izinler` → `Bakiyeler.Rezerve(...)`; onayda
    `Kesinlestir(...)`; ret veya iptalde `SerbestBirak(...)`. "Bakiye negatif olamaz" değişmezi
@@ -57,13 +61,15 @@ tests/
 |---|---|---|
 | YB-1 | Bir modül başka bir modülün `internal` tiplerine, entity'lerine veya DbContext'ine erişemez. | Entity ve DbContext'ler `internal` — derleyici |
 | YB-2 | Proje referansları yukarıdaki grafiğin dışına çıkamaz; döngü yasak. | csproj referansları + `Mimari.Tests` |
-| YB-3 | `Calisanlar`, `Takvim`, `Bakiyeler` hiçbir başka modüle referans veremez. | `Mimari.Tests` |
+| YB-3 | `Calisanlar`, `Takvim`, `Bakiyeler` `Ortak` dışında hiçbir projeye referans veremez. | `Mimari.Tests` |
 | YB-4 | Modül projeleri `Microsoft.AspNetCore.*` assembly'lerine bağımlı olamaz. | `Mimari.Tests` |
 | YB-5 | `Web`, EF Core / `DbContext`'e doğrudan erişemez (istisna: modüllerin `Kaydet(...)` çağrıları). | `Mimari.Tests` |
+| YB-6 | `Ortak` hiçbir PolsanIzin projesine referans veremez; EF Core, `Microsoft.AspNetCore.*` ve domain tipi (entity, iş kuralı) içeremez. | `Mimari.Tests` + review |
 
 Mimari testler ek paket olmadan reflection ile (`Assembly.GetReferencedAssemblies()`) yazılır.
 
 ## Deliberately out of scope
 Mikroservisler · mesaj kuyruğu / olay altyapısı · dağıtık önbellek · çoklu kiracı (multi-tenant) ·
 bordro / SGK entegrasyonu · kurumsal SSO (AD / Entra ID) · mobil uygulama · çok seviyeli onay ·
-e-posta dışı bildirimler · tarayıcı tabanlı E2E testleri (bkz. `docs/testing.md`).
+tüm bildirimler (e-posta dahil; yönetici bekleyen talepleri ekranda görür, gerekirse ileride
+`Bildirimler` modülü ADR ile eklenir) · tarayıcı tabanlı E2E testleri (bkz. `docs/testing.md`).

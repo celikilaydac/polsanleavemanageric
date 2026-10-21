@@ -10,7 +10,11 @@
 - **xUnit v3**, yerleşik `Assert`. Ek assertion kütüphanesi yok.
 - **Birim testler:** `tests/PolsanIzin.<Modul>.Tests/` — her modüle bir proje. Zaman için
   `FakeTimeProvider` (Microsoft.Extensions.TimeProvider.Testing).
-- **Mimari testler:** `tests/PolsanIzin.Mimari.Tests/` — YB-1…YB-5, reflection ile.
+- **Mimari testler:** `tests/PolsanIzin.Mimari.Tests/` — YB-1…YB-6, reflection ile.
+- **Test runner modu: VSTest** (`dotnet test` varsayılanı, `xunit.runner.visualstudio`).
+  `check.conf`'taki `--filter "Kategori…"` sözdizimi bu moda göredir; Microsoft.Testing.Platform'a
+  geçiş ADR ve filtrelerin yeniden yazılmasını gerektirir. İskelet spec'i ve runner'a dokunan her
+  değişiklik, test sayısının `fast + full-only = toplam` olduğunu gösterir (sessizce 0 test riski).
 - **Entegrasyon testleri:** `tests/PolsanIzin.Web.Tests/` — `WebApplicationFactory` ile süreç içi
   gerçek HTTP istekleri, in-memory SQLite, HTML ayrıştırma için AngleSharp. Her test sınıfı
   `[Trait("Kategori", "Entegrasyon")]` taşır.
@@ -22,10 +26,11 @@
 - Test adları: `Metot_Durum_BeklenenSonuc` (`docs/conventions.md`).
 
 ## What must be tested
-1. Her iş kuralı (BR-1…BR-11): olumlu ve olumsuz durum. BR-1 için sınırlar: hafta sonu, resmi
-   tatil, yıl geçişi, tek günlük talep.
+1. Her iş kuralı (BR-1…BR-13): olumlu ve olumsuz durum. BR-1 için sınırlar: hafta sonu, resmi
+   tatil, tek günlük talep; yıl geçişi BR-13 ile (yıla yayılan talep reddedilir). BR-12 için:
+   UTC 21:00–24:00 arası (İstanbul'da ertesi gün) `FakeTimeProvider` ile.
 2. Her domain değişmezi: bakiye negatif olamaz, son durumdan geçiş yok, denetim izi yazılır.
-3. Her yasaklı bağımlılık (YB-1…YB-5): bir mimari test.
+3. Her yasaklı bağımlılık (YB-1…YB-6): bir mimari test.
 4. Yetki: her sayfada yetkisiz erişim reddedilir; kaynak yetkisi (BR-6, başkasının talebi)
    doğrudan POST ile de denenir.
 5. Kritik akış (entegrasyon): giriş → talep oluştur → yönetici onaylar → bakiye düşer.

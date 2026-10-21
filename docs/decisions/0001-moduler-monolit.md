@@ -32,3 +32,8 @@ derleyici (`internal`) ile mimari testler (YB-1…YB-5, `docs/architecture.md`) 
 - Bir modülün bağımsız ölçeklenmesi veya ayrı ekip tarafından dağıtılması gerekirse.
 - Modüller arası senkron çağrılar döngüye zorlamaya başlarsa (olay tabanlı iletişim ADR'si).
 - Kullanıcı sayısı veya veri hacmi SQLite sınırlarına yaklaşırsa (ayrı ADR: veritabanı).
+
+## Amendments
+- 2026-10-21 (bootstrap revizyonu): `PolsanIzin.Ortak` paylaşılan çekirdeği eklendi (`Sonuc`,
+  `Hata`, `Bugun()`); tüm projeler ona referans verebilir, o hiçbirine veremez. Yeni kural YB-6
+  (`docs/architecture.md`). Gerekçe: YB-3 altında `Sonuc` deseni başka türlü paylaşılamıyordu.
