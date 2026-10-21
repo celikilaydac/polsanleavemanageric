@@ -4,7 +4,8 @@
 > yoktur — ama alışkanlıklar gerçek bir sistemdeki gibi kurulur.
 
 ## Secrets
-- Secrets never enter the repo, specs, prompts, or chat. Yerel secret'lar `dotnet user-secrets` veya gitignore'daki `appsettings.*.local.json` içinde tutulur (bu projede `.env` kullanılmaz).
+- Secrets never enter the repo, specs, prompts, or chat. Yerel secret'lar `dotnet user-secrets`
+  veya gitignore'daki `appsettings.*.local.json` içinde tutulur (bu projede `.env` kullanılmaz).
 - Agents never print secret values, even when debugging.
 - `appsettings.*.local.json` gitignore'dadır. SQLite bağlantı dizesi secret sayılmaz.
 - Demo kullanıcı parolaları yalnızca `Development` seed verisinde bulunur; başka ortamda seed çalışmaz.
@@ -37,8 +38,8 @@
   giriş sayfası ve statik dosyalar içindir.
 - **Rol yetkisi:** `Calisan`, `Yonetici`, `Ik` rolleri sayfa seviyesinde policy ile korunur.
 - **Kaynak yetkisi modül servisinde de uygulanır**, yalnızca ekranda değil: "onaylayan, çalışanın
-  onaylayıcısı mı?" (BR-6, BR-14), "talep bu çalışanın mı?". Gizlenmiş bir buton yetki değildir; doğrudan
-  gönderilen istek de reddedilir.
+  onaylayıcısı mı?" (BR-6, BR-14), "talep bu çalışanın mı?". Gizlenmiş bir buton yetki değildir;
+  doğrudan gönderilen istek de reddedilir.
 - ID'ler tahmin edilemez (Guid v7) ama güvenlik buna dayanmaz; her erişimde yetki kontrol edilir.
 
 ## Dependencies

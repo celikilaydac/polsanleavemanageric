@@ -29,7 +29,8 @@
 - **BR-4:** Başlangıç tarihi bitiş tarihinden sonra olamaz; talep en az 1 iş günü içerir.
 - **BR-5:** Geçmiş tarihli talep oluşturulamaz (başlangıç tarihi ≥ bugün).
 - **BR-6:** Talebi çalışanın onaylayıcısı onaylar veya reddeder: kendi yöneticisi; yöneticisi yoksa
-  İK (BR-14). Kimse kendi talebini onaylayamaz; İK, yöneticisi olan bir çalışanın talebini onaylayamaz.
+  İK (BR-14). Kimse kendi talebini onaylayamaz. Yöneticisi olan bir çalışanın talebini yalnızca o
+  yönetici onaylar; İK rolü ek bir onay yetkisi vermez.
 - **BR-7:** Reddetmede gerekçe zorunludur.
 - **BR-8:** Çalışan yalnızca `Beklemede` talebini iptal edebilir. Onaylanmış iznin iptali MVP
   kapsamı dışıdır.
@@ -45,8 +46,9 @@
   etkiler.
 - **BR-14:** Yöneticisi olmayan çalışanın (hiyerarşinin tepesi) talebini İK onaylar veya reddeder;
   BR-6 geçerlidir — İK rolündeki kişi de kendi talebini onaylayamaz. Tepedeki kişi İK ise talebini
-  başka bir İK onaylar; bu yüzden sistemde en az iki İK bulunur (seed verisi ve İK rolü kaldırma
-  işlemi bunu doğrular).
+  başka bir İK onaylar (BR-16).
+- **BR-16:** Sistemde en az iki İK bulunur. MVP'de rol yönetimi işlemi yoktur; roller seed
+  verisiyle gelir, seed bu kuralı sağlar ve bir test doğrular.
 - **BR-15:** İK bir yılın izin hakkını, o yılın kesinleşen kullanım + rezerve toplamının altına
   indiremez (bakiye negatif olamaz değişmezi).
 

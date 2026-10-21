@@ -5,7 +5,7 @@
 # also reads notebook_path, normalizes Windows backslashes and case, and rejects '..' segments.
 input=$(cat)
 path=$(printf '%s' "$input" | grep -oE '"(file_path|notebook_path)"[[:space:]]*:[[:space:]]*"[^"]*"' | head -n 1 \
-  | sed 's/^"[a-z_]*"[[:space:]]*:[[:space:]]*"//; s/"$//' | tr '\\' '/' | tr -s '/' | tr '[:upper:]' '[:lower:]')
+  | sed 's/^"[a-z_]*"[[:space:]]*:[[:space:]]*"//; s/"$//' | tr '\\' '/' | tr -s '/' | tr '[:upper:]' '[:lower:]' | sed 's#/\./#/#g; s#/\./#/#g; s#^\./##')
 block() {
   echo "Blocked: $1" >&2
   exit 2

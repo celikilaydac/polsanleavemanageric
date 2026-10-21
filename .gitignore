@@ -23,6 +23,12 @@ TestResults/
 *.user
 
 # Local SQLite databases and local settings (docs/security.md)
-*.db*
-*.sqlite*
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite-*
+*.sqlite3-*
+# a project folder named *.Db/ is source, not a database (core.ignorecase=true on Windows)
+!*.db/
 appsettings.*.local.json

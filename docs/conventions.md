@@ -63,5 +63,6 @@
 - Kod stili `.editorconfig` + `dotnet format --verify-no-changes` — `scripts/check` format adımı.
 - Mimari sınırlar YB-1…YB-6 — derleyici (`internal`) + `PolsanIzin.Mimari.Tests`.
 - Bilinen zafiyetli paketler — NuGetAudit (NU1901–NU1904) + `TreatWarningsAsErrors` derlemeyi kırar.
-- Review'da kontrol edilenler (henüz araçla değil): `TimeProvider` ve `Bugun()` kuralı, `DateTimeOffset` converter'ı, `Sonuc` deseni, Türkçe
-  ASCII isimlendirme. Bir analizörle korunabildiği anda `scripts/check`'e taşınır.
+- Review'da kontrol edilenler (henüz araçla değil): `TimeProvider` ve `Bugun()` kuralı,
+  `DateTimeOffset` converter'ı, `Sonuc` deseni, Türkçe ASCII isimlendirme. Bir analizörle
+  korunabildiği anda `scripts/check`'e taşınır.

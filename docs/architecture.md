@@ -28,7 +28,7 @@ tests/
 
 | Module | Single responsibility | Owns |
 |---|---|---|
-| `Calisanlar` | Çalışan kimliği, roller (Çalışan / Yönetici / İK), çalışan → yönetici bağı, kimlik bilgisi doğrulama | Çalışan, rol, yönetici bağı, parola hash'i |
+| `Calisanlar` | Çalışan kimliği, roller (Çalışan / Yönetici / İK; BR-16), çalışan → yönetici bağı, kimlik bilgisi doğrulama | Çalışan, rol, yönetici bağı, parola hash'i |
 | `Takvim` | İş günü hesabı ve resmi tatiller (BR-1) | Resmi tatil listesi |
 | `Bakiyeler` | İzin hakkı ve bakiye; rezerve / kesinleştir / serbest bırak (BR-2, BR-9, BR-10, BR-11, BR-15); bakiye asla negatif olmaz | İzin hakkı, bakiye hareketleri |
 | `Izinler` | İzin talebinin yaşam döngüsü: oluştur, onayla, reddet, iptal (BR-2…BR-9, BR-11, BR-13, BR-14); denetim izi | İzin talebi, durum geçmişi |

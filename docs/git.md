@@ -15,7 +15,8 @@
   - Şu yollara dokunan bir chore yeniden triage edilir (`workflows/change-request.md`): `src/`,
     `tests/`, `scripts/check.conf`, `Directory.Build.props`, `global.json`, `.editorconfig`.
     `Directory.Packages.props`'ta yalnızca mevcut bir `PackageVersion` değeri değişiyorsa chore kalır.
-  - İstisna: ilk kurulum (`/bootstrap`) dalı `docs/` kurallarını tanımlar ve bu kısıttan muaftır.
+  - İstisna: ilk kurulum dalı `chore/bootstrap`, `docs/` kurallarını tanımlar ve yalnızca `main`'e
+    ilk birleşmesine kadar bu kısıttan muaftır. Sonraki bootstrap revizyonları spec veya ADR ister.
 - Önekler İngilizce kalır; `<short-name>` Türkçe, ASCII, kebab-case'dir:
   `feature/0001-yillik-izin-talebi`, `trivial/buton-metni`, `incident/2026-10-20-giris-hatasi`.
 - Default branch: `main` (`origin` = `github.com/celikilaydac/polsanleavemanageric`).
@@ -23,8 +24,8 @@
 ## Commits
 - Conventional Commits, with a plan reference: `feat(izinler): yıllık izin talebi oluşturma [plan 0001/2]`.
 - Tür İngilizce (`feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `ci`); kapsam modül adı,
-  küçük harf (`izinler`, `bakiyeler`, `takvim`, `calisanlar`, `web`, `ortak`, `mimari`); açıklama Türkçe,
-  Türkçe karakter serbest.
+  küçük harf (`izinler`, `bakiyeler`, `takvim`, `calisanlar`, `web`, `ortak`, `mimari`);
+  açıklama Türkçe, Türkçe karakter serbest.
 - Agent commits follow the same standard: the agent writes the message, the human approves.
 
 ## Forbidden
