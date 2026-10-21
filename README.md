@@ -8,6 +8,25 @@
 **New here?** The [command reference](docs/commands.md) shows every command, where it stops, and how
 lite and strict differ — one page.
 
+## Geliştirme (PolsanIzin)
+
+Bu depo ANEW üzerine kurulu **PolsanIzin** uygulamasıdır (`AGENTS.md`). Gereken tek araç .NET SDK
+10.0.402'dir (`global.json`).
+
+```bash
+./scripts/check            # tek doğrulama komutu (tam profil); iç döngü için: ./scripts/check --fast
+ASPNETCORE_ENVIRONMENT=Development dotnet run --project src/PolsanIzin.Web   # PowerShell: $env:ASPNETCORE_ENVIRONMENT="Development"
+```
+
+- Uygulama `Development` ortamında açılınca SQLite dosyası (`src/PolsanIzin.Web/polsanizin.db`,
+  gitignore'da) ve şemalar kurulur, demo veri yüklenir: 8 kurgusal çalışan, 2026–2027 resmi
+  tatilleri, 2026 izin hakları (spec 0002, ADR 0003). Diğer ortamlarda demo veri yüklenmez.
+- Demo kullanıcıların e-postaları ve ortak demo parolası Calisanlar modülünün demo verisindedir:
+  `src/PolsanIzin.Calisanlar/Veri/DemoVeri.cs`. Parola yalnızca bu Development seed verisinde
+  tutulur, başka yere kopyalanmaz.
+- Migration eklemek için yerel araç: `dotnet tool restore`, sonra
+  `dotnet ef migrations add <Ad> --project src/PolsanIzin.<Modul> --startup-project src/PolsanIzin.<Modul>`.
+
 Use this repo as a GitHub template (or drop it into an existing project), install the adapter for
 your AI tool, run the bootstrap workflow, and start your first feature. No frameworks, no
 dependencies, no code generators — a working *system*, written in Markdown plus a few small POSIX scripts.
