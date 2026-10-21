@@ -23,11 +23,6 @@ TestResults/
 *.user
 
 # Local SQLite databases and local settings (docs/security.md)
-*.db
-*.db-shm
-*.db-wal
-*.sqlite
-*.sqlite3
-*.sqlite-shm
-*.sqlite-wal
+*.db*
+*.sqlite*
 appsettings.*.local.json

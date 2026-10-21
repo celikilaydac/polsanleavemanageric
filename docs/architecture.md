@@ -52,11 +52,16 @@ tests/
    yalnızca `Bakiyeler` içinde korunur.
 4. Her modülün **kendi `DbContext`'i ve kendi tabloları** vardır (aynı SQLite dosyası); ortak
    DbContext yoktur. Her modül iki public giriş sunar; `Web` yalnızca bunları çağırır (YB-5):
-   - `Kaydet(IServiceCollection, DbConnection)` — DI kaydı; tüm modüller **aynı** `DbConnection`'ı
-     alır. Üretimde dosya bağlantısı; testte tek, açık tutulan in-memory `SqliteConnection`
-     (bağlantı kapanırsa in-memory veritabanı kaybolur).
-   - `SemaKur(IServiceProvider)` — modülün kendi şemasını kurar/migrate eder. `Web` EF Core'a
-     (`Database.Migrate()`, `EnsureCreated`) doğrudan dokunmaz.
+   - `Kaydet(IServiceCollection, string baglantiDizesi)` — DI kaydı; tüm modüller **aynı bağlantı
+     dizesini** alır, her DbContext kendi bağlantısını açar (bağlantı örneği paylaşılmaz —
+     `SqliteConnection` thread-safe değildir; `Web` ADO.NET/SQLite paketine bağımlı olmaz).
+     Üretimde dosya; testte paylaşılan adlandırılmış in-memory veritabanı
+     (`Data Source=polsanizin-<guid>;Mode=Memory;Cache=Shared`), test factory'si veritabanı
+     yaşasın diye bir keep-alive bağlantıyı açık tutar.
+   - `SemaKur(IServiceProvider)` — modülün şemasını `Database.Migrate()` ile kurar; her modül kendi
+     geçmiş tablosunu kullanır (`MigrationsHistoryTable("__EFMigrationsHistory_<Modul>")`).
+     `EnsureCreated` yasaktır (paylaşılan veritabanında ilk modülden sonra tablo oluşturmaz).
+     `Web` EF Core'a doğrudan dokunmaz.
 5. `Web` yalnızca modül servislerini çağırır; iş kuralı, doğrulama mantığı veya sorgu yazmaz.
 
 ## Forbidden dependencies (make them testable)

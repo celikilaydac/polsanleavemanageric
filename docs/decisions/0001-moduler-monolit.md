@@ -1,7 +1,7 @@
 # ADR 0001 — Modüler monolit mimarisi
 
 - Status: Accepted
-- Date: 2026-10-19
+- Date: 2026-10-21
 
 ## Context
 PolsanIzin, 50–500 kullanıcılı bir şirket içi izin yönetim sistemidir ve bir eğitim projesidir.

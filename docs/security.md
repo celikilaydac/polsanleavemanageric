@@ -37,7 +37,7 @@
   giriş sayfası ve statik dosyalar içindir.
 - **Rol yetkisi:** `Calisan`, `Yonetici`, `Ik` rolleri sayfa seviyesinde policy ile korunur.
 - **Kaynak yetkisi modül servisinde de uygulanır**, yalnızca ekranda değil: "onaylayan, çalışanın
-  yöneticisi mi?" (BR-6), "talep bu çalışanın mı?". Gizlenmiş bir buton yetki değildir; doğrudan
+  onaylayıcısı mı?" (BR-6, BR-14), "talep bu çalışanın mı?". Gizlenmiş bir buton yetki değildir; doğrudan
   gönderilen istek de reddedilir.
 - ID'ler tahmin edilemez (Guid v7) ama güvenlik buna dayanmaz; her erişimde yetki kontrol edilir.
 

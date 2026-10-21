@@ -8,12 +8,14 @@
 - Fixes: `fix/<report-id>-<short-name>` (bug fixes carry a report, not a spec number);
   incidents: `incident/<date>-<short-name>`; trivial changes: `trivial/<short-name>` (see below).
 - İş alanı / araç değişiklikleri: `chore/<short-name>` — yalnızca ANEW çekirdeği ve adapter'ları,
-  CI, editör/araç ayarları ve **mevcut** paketlerin sürüm yükseltmesi. Spec gerekmez; PR iş kalemini
-  adlandırır, bağımsız review + `scripts/check` yeşil zorunludur.
-  - Chore **değildir** (spec veya ADR gerekir): `docs/domain.md`, `docs/architecture.md`,
-    `docs/security.md` kuralları (BR, YB, güvenlik), yeni paket eklemek (`docs/security.md`).
+  CI, editör ayarları (`.editorconfig` hariç) ve **mevcut** paketlerin sürüm yükseltmesi. Spec
+  gerekmez; PR iş kalemini adlandırır, bağımsız review + `scripts/check` yeşil zorunludur.
+  - Chore **değildir** (spec veya ADR gerekir): projeye özgü `docs/*.md` kuralları (domain, mimari,
+    güvenlik, konvansiyon, test, git) ve yeni paket eklemek (`docs/security.md`).
   - Şu yollara dokunan bir chore yeniden triage edilir (`workflows/change-request.md`): `src/`,
-    `tests/`, `scripts/check.conf`, `Directory.*.props`, `global.json`, `.editorconfig`.
+    `tests/`, `scripts/check.conf`, `Directory.Build.props`, `global.json`, `.editorconfig`.
+    `Directory.Packages.props`'ta yalnızca mevcut bir `PackageVersion` değeri değişiyorsa chore kalır.
+  - İstisna: ilk kurulum (`/bootstrap`) dalı `docs/` kurallarını tanımlar ve bu kısıttan muaftır.
 - Önekler İngilizce kalır; `<short-name>` Türkçe, ASCII, kebab-case'dir:
   `feature/0001-yillik-izin-talebi`, `trivial/buton-metni`, `incident/2026-10-20-giris-hatasi`.
 - Default branch: `main` (`origin` = `github.com/celikilaydac/polsanleavemanageric`).

@@ -7,7 +7,7 @@
 
 | Term | Meaning | Notes / not to be confused with |
 |---|---|---|
-| Çalışan (`Calisan`) | Sisteme giriş yapan ve izin talep eden kişi. Her çalışanın tek bir yöneticisi vardır. | İK ve yöneticiler de çalışandır. |
+| Çalışan (`Calisan`) | Sisteme giriş yapan ve izin talep eden kişi. Her çalışanın en fazla bir yöneticisi vardır (hiyerarşinin tepesinde yoktur; BR-14). | İK ve yöneticiler de çalışandır. |
 | Yönetici (`Yonetici`) | Kendisine bağlı çalışanların taleplerini onaylayan / reddeden çalışan. | Ayrı bir kişi türü değil, bir **rol**. |
 | İK (`Ik`) | Tüm talepleri ve bakiyeleri gören, izin hakkı ve resmi tatil tanımlayan rol. | Kendi ekibi yoksa talep onaylamaz; istisna: yöneticisi olmayan çalışanın talebi (BR-14). |
 | İzin türü (`IzinTuru`) | MVP'de `Yillik`, `Mazeret`, `Ucretsiz`. | Bakiyeden yalnızca `Yillik` düşer. |
@@ -28,8 +28,8 @@
 - **BR-3:** Bir çalışanın `Beklemede` veya `Onaylandi` talepleri tarih olarak çakışamaz.
 - **BR-4:** Başlangıç tarihi bitiş tarihinden sonra olamaz; talep en az 1 iş günü içerir.
 - **BR-5:** Geçmiş tarihli talep oluşturulamaz (başlangıç tarihi ≥ bugün).
-- **BR-6:** Talebi yalnızca çalışanın kendi yöneticisi onaylar veya reddeder; kimse kendi talebini
-  onaylayamaz.
+- **BR-6:** Talebi çalışanın onaylayıcısı onaylar veya reddeder: kendi yöneticisi; yöneticisi yoksa
+  İK (BR-14). Kimse kendi talebini onaylayamaz; İK, yöneticisi olan bir çalışanın talebini onaylayamaz.
 - **BR-7:** Reddetmede gerekçe zorunludur.
 - **BR-8:** Çalışan yalnızca `Beklemede` talebini iptal edebilir. Onaylanmış iznin iptali MVP
   kapsamı dışıdır.
@@ -44,7 +44,9 @@
   sonunu aşan izin için çalışan iki ayrı talep açar. Böylece her talep tek bir yılın bakiyesini
   etkiler.
 - **BR-14:** Yöneticisi olmayan çalışanın (hiyerarşinin tepesi) talebini İK onaylar veya reddeder;
-  BR-6 geçerlidir — İK rolündeki kişi de kendi talebini onaylayamaz.
+  BR-6 geçerlidir — İK rolündeki kişi de kendi talebini onaylayamaz. Tepedeki kişi İK ise talebini
+  başka bir İK onaylar; bu yüzden sistemde en az iki İK bulunur (seed verisi ve İK rolü kaldırma
+  işlemi bunu doğrular).
 - **BR-15:** İK bir yılın izin hakkını, o yılın kesinleşen kullanım + rezerve toplamının altına
   indiremez (bakiye negatif olamaz değişmezi).
 

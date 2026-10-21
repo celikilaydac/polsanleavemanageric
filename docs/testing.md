@@ -31,8 +31,8 @@
    UTC 21:00–24:00 arası (İstanbul'da ertesi gün) `FakeTimeProvider` ile.
 2. Her domain değişmezi: bakiye negatif olamaz, son durumdan geçiş yok, denetim izi yazılır.
 3. Her yasaklı bağımlılık (YB-1…YB-6): bir mimari test.
-4. Yetki: her sayfada yetkisiz erişim reddedilir; kaynak yetkisi (BR-6, başkasının talebi)
-   doğrudan POST ile de denenir.
+4. Yetki: her sayfada yetkisiz erişim reddedilir; kaynak yetkisi (BR-6, BR-14, başkasının talebi)
+   doğrudan POST ile de denenir — İK'nın yöneticisi olan bir çalışanın talebini onaylayamadığı dahil.
 5. Kritik akış (entegrasyon): giriş → talep oluştur → yönetici onaylar → bakiye düşer.
 
 ## Fast / full split (bu proje)
