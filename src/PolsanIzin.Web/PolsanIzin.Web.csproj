@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\PolsanIzin.Ortak\PolsanIzin.Ortak.csproj" />
+    <ProjectReference Include="..\PolsanIzin.Calisanlar\PolsanIzin.Calisanlar.csproj" />
+    <ProjectReference Include="..\PolsanIzin.Takvim\PolsanIzin.Takvim.csproj" />
+    <ProjectReference Include="..\PolsanIzin.Bakiyeler\PolsanIzin.Bakiyeler.csproj" />
+    <ProjectReference Include="..\PolsanIzin.Izinler\PolsanIzin.Izinler.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\PolsanIzin.Ortak\PolsanIzin.Ortak.csproj" />
+    <ProjectReference Include="..\PolsanIzin.Calisanlar\PolsanIzin.Calisanlar.csproj" />
+    <ProjectReference Include="..\PolsanIzin.Takvim\PolsanIzin.Takvim.csproj" />
+    <ProjectReference Include="..\PolsanIzin.Bakiyeler\PolsanIzin.Bakiyeler.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="PolsanIzin.Izinler.Tests" />
+  </ItemGroup>
+
+</Project>

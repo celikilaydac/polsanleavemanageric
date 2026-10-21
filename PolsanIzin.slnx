@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PolsanIzin.Ortak/PolsanIzin.Ortak.csproj" />
+    <Project Path="src/PolsanIzin.Calisanlar/PolsanIzin.Calisanlar.csproj" />
+    <Project Path="src/PolsanIzin.Takvim/PolsanIzin.Takvim.csproj" />
+    <Project Path="src/PolsanIzin.Bakiyeler/PolsanIzin.Bakiyeler.csproj" />
+    <Project Path="src/PolsanIzin.Izinler/PolsanIzin.Izinler.csproj" />
+    <Project Path="src/PolsanIzin.Web/PolsanIzin.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PolsanIzin.Ortak.Tests/PolsanIzin.Ortak.Tests.csproj" />
+    <Project Path="tests/PolsanIzin.Calisanlar.Tests/PolsanIzin.Calisanlar.Tests.csproj" />
+    <Project Path="tests/PolsanIzin.Takvim.Tests/PolsanIzin.Takvim.Tests.csproj" />
+    <Project Path="tests/PolsanIzin.Bakiyeler.Tests/PolsanIzin.Bakiyeler.Tests.csproj" />
+    <Project Path="tests/PolsanIzin.Izinler.Tests/PolsanIzin.Izinler.Tests.csproj" />
+    <Project Path="tests/PolsanIzin.Mimari.Tests/PolsanIzin.Mimari.Tests.csproj" />
+    <Project Path="tests/PolsanIzin.Web.Tests/PolsanIzin.Web.Tests.csproj" />
+  </Folder>
+</Solution>
