@@ -58,9 +58,12 @@ tests/
      Üretimde dosya; testte paylaşılan adlandırılmış in-memory veritabanı
      (`Data Source=polsanizin-<guid>;Mode=Memory;Cache=Shared`), test factory'si veritabanı
      yaşasın diye bir keep-alive bağlantıyı açık tutar.
-   - `SemaKur(IServiceProvider)` — modülün şemasını `Database.Migrate()` ile kurar; her modül kendi
-     geçmiş tablosunu kullanır (`MigrationsHistoryTable("__EFMigrationsHistory_<Modul>")`).
-     `EnsureCreated` yasaktır (paylaşılan veritabanında ilk modülden sonra tablo oluşturmaz).
+   - `SemaKur(IServiceProvider, bool demoVeriYukle)` — modülün şemasını `Database.Migrate()` ile
+     kurar; her modül kendi geçmiş tablosunu kullanır
+     (`MigrationsHistoryTable("__EFMigrationsHistory_<Modul>")`). `EnsureCreated` yasaktır
+     (paylaşılan veritabanında ilk modülden sonra tablo oluşturmaz). `demoVeriYukle` yalnızca
+     `Development`'ta `true`dur; modül kendi demo verisini idempotent yükler; demo çalışan
+     kimlikleri sabit Guid'lerdir ([ADR 0003](decisions/0003-modul-giris-noktalari-ve-demo-veri.md)).
      `Web` EF Core'a doğrudan dokunmaz.
 5. `Web` yalnızca modül servislerini çağırır; iş kuralı, doğrulama mantığı veya sorgu yazmaz.
 
