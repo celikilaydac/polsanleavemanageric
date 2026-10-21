@@ -26,7 +26,7 @@
 - Test adları: `Metot_Durum_BeklenenSonuc` (`docs/conventions.md`).
 
 ## What must be tested
-1. Her iş kuralı (BR-1…BR-13): olumlu ve olumsuz durum. BR-1 için sınırlar: hafta sonu, resmi
+1. Her iş kuralı (BR-1…BR-15): olumlu ve olumsuz durum. BR-1 için sınırlar: hafta sonu, resmi
    tatil, tek günlük talep; yıl geçişi BR-13 ile (yıla yayılan talep reddedilir). BR-12 için:
    UTC 21:00–24:00 arası (İstanbul'da ertesi gün) `FakeTimeProvider` ile.
 2. Her domain değişmezi: bakiye negatif olamaz, son durumdan geçiş yok, denetim izi yazılır.

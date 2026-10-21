@@ -30,8 +30,8 @@ tests/
 |---|---|---|
 | `Calisanlar` | Çalışan kimliği, roller (Çalışan / Yönetici / İK), çalışan → yönetici bağı, kimlik bilgisi doğrulama | Çalışan, rol, yönetici bağı, parola hash'i |
 | `Takvim` | İş günü hesabı ve resmi tatiller (BR-1) | Resmi tatil listesi |
-| `Bakiyeler` | İzin hakkı ve bakiye; rezerve / kesinleştir / serbest bırak (BR-2, BR-9, BR-10); bakiye asla negatif olmaz | İzin hakkı, bakiye hareketleri |
-| `Izinler` | İzin talebinin yaşam döngüsü: oluştur, onayla, reddet, iptal (BR-2…BR-9); denetim izi | İzin talebi, durum geçmişi |
+| `Bakiyeler` | İzin hakkı ve bakiye; rezerve / kesinleştir / serbest bırak (BR-2, BR-9, BR-10, BR-11, BR-15); bakiye asla negatif olmaz | İzin hakkı, bakiye hareketleri |
+| `Izinler` | İzin talebinin yaşam döngüsü: oluştur, onayla, reddet, iptal (BR-2…BR-9, BR-11, BR-13, BR-14); denetim izi | İzin talebi, durum geçmişi |
 | `Web` | Razor Pages ekranları, kimlik doğrulama (cookie), yetki policy'leri; **iş kuralı içermez** | (veri sahibi değil) |
 | `Ortak` | Paylaşılan çekirdek: `Sonuc` / `Sonuc<T>` / `Hata`, `TimeProvider.Bugun()` (BR-12). Domain değil, altyapı tipidir | (veri sahibi değil) |
 
@@ -51,8 +51,12 @@ tests/
    `Kesinlestir(...)`; ret veya iptalde `SerbestBirak(...)`. "Bakiye negatif olamaz" değişmezi
    yalnızca `Bakiyeler` içinde korunur.
 4. Her modülün **kendi `DbContext`'i ve kendi tabloları** vardır (aynı SQLite dosyası); ortak
-   DbContext yoktur. Her modül, `Web`'in başlangıçta çağırdığı bir `Kaydet(...)` (DI kayıt) uzantı
-   metodu sunar.
+   DbContext yoktur. Her modül iki public giriş sunar; `Web` yalnızca bunları çağırır (YB-5):
+   - `Kaydet(IServiceCollection, DbConnection)` — DI kaydı; tüm modüller **aynı** `DbConnection`'ı
+     alır. Üretimde dosya bağlantısı; testte tek, açık tutulan in-memory `SqliteConnection`
+     (bağlantı kapanırsa in-memory veritabanı kaybolur).
+   - `SemaKur(IServiceProvider)` — modülün kendi şemasını kurar/migrate eder. `Web` EF Core'a
+     (`Database.Migrate()`, `EnsureCreated`) doğrudan dokunmaz.
 5. `Web` yalnızca modül servislerini çağırır; iş kuralı, doğrulama mantığı veya sorgu yazmaz.
 
 ## Forbidden dependencies (make them testable)
@@ -63,7 +67,7 @@ tests/
 | YB-2 | Proje referansları yukarıdaki grafiğin dışına çıkamaz; döngü yasak. | csproj referansları + `Mimari.Tests` |
 | YB-3 | `Calisanlar`, `Takvim`, `Bakiyeler` `Ortak` dışında hiçbir projeye referans veremez. | `Mimari.Tests` |
 | YB-4 | Modül projeleri `Microsoft.AspNetCore.*` assembly'lerine bağımlı olamaz. | `Mimari.Tests` |
-| YB-5 | `Web`, EF Core / `DbContext`'e doğrudan erişemez (istisna: modüllerin `Kaydet(...)` çağrıları). | `Mimari.Tests` |
+| YB-5 | `Web`, EF Core / `DbContext`'e doğrudan erişemez (istisna: modüllerin `Kaydet(...)` ve `SemaKur(...)` çağrıları). | `Mimari.Tests` |
 | YB-6 | `Ortak` hiçbir PolsanIzin projesine referans veremez; EF Core, `Microsoft.AspNetCore.*` ve domain tipi (entity, iş kuralı) içeremez. | `Mimari.Tests` + review |
 
 Mimari testler ek paket olmadan reflection ile (`Assembly.GetReferencedAssemblies()`) yazılır.

@@ -13,7 +13,10 @@ yaşam döngüsü. Eğitim hedefi, modül sınırlarının nasıl korunduğunu �
 Tek dağıtılabilir uygulama ve tek SQLite veritabanından oluşan bir **modüler monolit** kurulur;
 modüller (`Calisanlar`, `Takvim`, `Bakiyeler`, `Izinler`, `Web`) ayrı class library projeleridir,
 yalnızca public arayüzlerle senkron konuşur, kendi DbContext ve tablolarına sahiptir ve sınırlar
-derleyici (`internal`) ile mimari testler (YB-1…YB-5, `docs/architecture.md`) tarafından korunur.
+derleyici (`internal`) ile mimari testler (YB-1…YB-6, `docs/architecture.md`) tarafından korunur.
+Modüllerin paylaştığı altyapı tipleri (`Sonuc`, `Hata`, `Bugun()`) dar bir paylaşılan çekirdekte,
+`PolsanIzin.Ortak`'ta durur: tüm projeler ona referans verebilir, o hiçbirine veremez ve domain
+tipi içermez (YB-6). Aksi halde YB-3 altında ortak sonuç deseni paylaşılamazdı.
 
 ## Consequences
 - Kazanç: tek build, tek dağıtım, tek test komutu; modül sınırları test edilebilir; ileride bir
@@ -32,8 +35,3 @@ derleyici (`internal`) ile mimari testler (YB-1…YB-5, `docs/architecture.md`) 
 - Bir modülün bağımsız ölçeklenmesi veya ayrı ekip tarafından dağıtılması gerekirse.
 - Modüller arası senkron çağrılar döngüye zorlamaya başlarsa (olay tabanlı iletişim ADR'si).
 - Kullanıcı sayısı veya veri hacmi SQLite sınırlarına yaklaşırsa (ayrı ADR: veritabanı).
-
-## Amendments
-- 2026-10-21 (bootstrap revizyonu): `PolsanIzin.Ortak` paylaşılan çekirdeği eklendi (`Sonuc`,
-  `Hata`, `Bugun()`); tüm projeler ona referans verebilir, o hiçbirine veremez. Yeni kural YB-6
-  (`docs/architecture.md`). Gerekçe: YB-3 altında `Sonuc` deseni başka türlü paylaşılamıyordu.

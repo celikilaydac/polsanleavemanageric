@@ -1,8 +1,10 @@
 #!/bin/sh
 # PreToolUse hook: files under specs/done/ are immutable (AGENTS.md invariant rule 7).
-# Reads the tool-call JSON from stdin, blocks Edit/Write targeting specs/done/.
+# Reads the tool-call JSON from stdin, blocks Edit/Write/NotebookEdit targeting specs/done/.
+# Local divergence from adapters/claude-code (bootstrap review B-1, to be reported upstream):
+# also reads notebook_path and normalizes Windows backslash paths before matching.
 input=$(cat)
-path=$(printf '%s' "$input" | grep -o '"file_path"[[:space:]]*:[[:space:]]*"[^"]*"' | head -n 1 | sed 's/.*"file_path"[[:space:]]*:[[:space:]]*"//; s/"$//')
+path=$(printf '%s' "$input" | grep -o '"\(file_path\|notebook_path\)"[[:space:]]*:[[:space:]]*"[^"]*"' | head -n 1 | sed 's/^"[a-z_]*"[[:space:]]*:[[:space:]]*"//; s/"$//' | sed 's/\\\\*/\//g')
 case "$path" in
   *specs/done/*)
     echo "Blocked: specs/done/ is immutable (shipped specs are the historical record — AGENTS.md rule 7). Behavior changing? Open a NEW spec in specs/active/ referencing the old one." >&2

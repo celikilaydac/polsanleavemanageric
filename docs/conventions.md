@@ -10,6 +10,7 @@
 - Document language (docs/, specs, plans, ADRs, review and verify reports): Türkçe
 - Always English (protocol, not prose): ANEW core files, template headings and field labels,
   `Status:` values (Draft / Approved / In progress / Shipped), `Approved by / on:`, `Source:`.
+  `docs/` içinde ANEW'den miras kalan kural metni İngilizce kalabilir; projeye özgü metin Türkçedir.
 - Code identifiers, branch names, commit messages: **Türkçe.** Tanımlayıcılar ASCII'dir
   (`ı ş ğ ü ö ç` → `i s g u o c`: `IzinTalebi`, `OnayVer()`); branch önekleri ve Conventional
   Commits türleri İngilizce kalır (`docs/git.md`); commit açıklamalarında Türkçe karakter serbesttir.
@@ -44,7 +45,9 @@
 
 ## Data rules
 - İzin tarihleri `DateOnly`'dir (gün bazlı, saat dilimi yok).
-- Zaman damgaları (denetim izi vb.) `DateTimeOffset`, UTC.
+- Zaman damgaları (denetim izi vb.) `DateTimeOffset`, UTC. SQLite sağlayıcısı `DateTimeOffset`
+  üzerinde sıralama/karşılaştırma çeviremediği için bu sütunlar UTC ticks (`long`) value
+  converter'ıyla saklanır — zorunlu.
 - "Şimdi" / "bugün" her zaman enjekte edilen `TimeProvider` ile alınır; `DateTime.Now`,
   `DateTime.UtcNow`, `DateTimeOffset.Now` doğrudan kullanılmaz.
 - "Bugün" yalnızca `Ortak`'taki `timeProvider.Bugun()` uzantısıyla alınır (Europe/Istanbul,

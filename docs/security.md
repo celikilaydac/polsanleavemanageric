@@ -4,7 +4,7 @@
 > yoktur — ama alışkanlıklar gerçek bir sistemdeki gibi kurulur.
 
 ## Secrets
-- Secrets never enter the repo, specs, prompts, or chat. `.env` is gitignored; provide `.env.example`.
+- Secrets never enter the repo, specs, prompts, or chat. Yerel secret'lar `dotnet user-secrets` veya gitignore'daki `appsettings.*.local.json` içinde tutulur (bu projede `.env` kullanılmaz).
 - Agents never print secret values, even when debugging.
 - `appsettings.*.local.json` gitignore'dadır. SQLite bağlantı dizesi secret sayılmaz.
 - Demo kullanıcı parolaları yalnızca `Development` seed verisinde bulunur; başka ortamda seed çalışmaz.
@@ -29,6 +29,10 @@
 - **Kaba kuvvet koruması:** giriş POST'u ASP.NET Core yerleşik rate limiter ile IP başına
   dakikada 10 denemeyle sınırlıdır; aşımda 429 ve genel Türkçe mesaj döner. Hesap kilitleme MVP
   kapsamı dışıdır.
+  - Limit options ile yapılandırılır (sabit kodlanmaz); entegrasyon test factory'si override eder.
+  - IP'si `null` olan istekler (ör. TestServer) için açık bir bölüm anahtarı tanımlanır.
+  - Ters vekil arkasına çıkılırsa önce `ForwardedHeaders` yapılandırılır; yoksa tüm kullanıcılar
+    tek IP'yi paylaşır.
 - **Varsayılan reddet:** global `FallbackPolicy = RequireAuthenticatedUser`. Anonim erişim yalnızca
   giriş sayfası ve statik dosyalar içindir.
 - **Rol yetkisi:** `Calisan`, `Yonetici`, `Ik` rolleri sayfa seviyesinde policy ile korunur.
@@ -42,7 +46,8 @@
 - Tercih sırası: Microsoft resmi paketleri → yaygın, bakımı süren açık kaynak paketler. Lisans
   MIT / Apache-2.0 / BSD uyumlu olmalıdır.
 - NuGetAudit açıktır; bilinen zafiyetli paket (NU1901–NU1904) `TreatWarningsAsErrors` ile derlemeyi
-  kırar.
+  kırar. Düşük önem (NU1901) dahil — bilinçli seçim: eğitim projesinde katı varsayılan;
+  CI bir advisory ile kırmızıya dönerse paket yükseltilir (`chore/`), seviye düşürülmez.
 
 ## Review lens
 Security is a mandatory dimension of every independent review (see `prompts/review.md`), not a

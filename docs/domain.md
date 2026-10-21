@@ -9,7 +9,7 @@
 |---|---|---|
 | Çalışan (`Calisan`) | Sisteme giriş yapan ve izin talep eden kişi. Her çalışanın tek bir yöneticisi vardır. | İK ve yöneticiler de çalışandır. |
 | Yönetici (`Yonetici`) | Kendisine bağlı çalışanların taleplerini onaylayan / reddeden çalışan. | Ayrı bir kişi türü değil, bir **rol**. |
-| İK (`Ik`) | Tüm talepleri ve bakiyeleri gören, izin hakkı ve resmi tatil tanımlayan rol. | Talep onaylamaz (kendi ekibi yoksa). |
+| İK (`Ik`) | Tüm talepleri ve bakiyeleri gören, izin hakkı ve resmi tatil tanımlayan rol. | Kendi ekibi yoksa talep onaylamaz; istisna: yöneticisi olmayan çalışanın talebi (BR-14). |
 | İzin türü (`IzinTuru`) | MVP'de `Yillik`, `Mazeret`, `Ucretsiz`. | Bakiyeden yalnızca `Yillik` düşer. |
 | İzin talebi (`IzinTalebi`) | Bir çalışanın, belirli bir tarih aralığı ve izin türü için yaptığı başvuru. | "İzin" tek başına belirsizdir; talebi mi, hakkı mı kastettiğini belirtin. |
 | Talep durumu (`TalepDurumu`) | `Beklemede`, `Onaylandi`, `Reddedildi`, `IptalEdildi`. | `Onaylandi`, `Reddedildi`, `IptalEdildi` son durumlardır. |
@@ -43,6 +43,10 @@
 - **BR-13:** Bir talep iki takvim yılına yayılamaz (başlangıç ve bitiş aynı yıldadır); yıl
   sonunu aşan izin için çalışan iki ayrı talep açar. Böylece her talep tek bir yılın bakiyesini
   etkiler.
+- **BR-14:** Yöneticisi olmayan çalışanın (hiyerarşinin tepesi) talebini İK onaylar veya reddeder;
+  BR-6 geçerlidir — İK rolündeki kişi de kendi talebini onaylayamaz.
+- **BR-15:** İK bir yılın izin hakkını, o yılın kesinleşen kullanım + rezerve toplamının altına
+  indiremez (bakiye negatif olamaz değişmezi).
 
 ## Key domain invariants
 
