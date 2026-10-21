@@ -1,0 +1,75 @@
+:root {
+    --metin: #1f2328;
+    --zemin: #ffffff;
+    --vurgu: #0b5cad;
+    --hata: #b42318;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+    color: var(--metin);
+    background: var(--zemin);
+    line-height: 1.5;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid #d0d7de;
+}
+
+nav ul {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+nav form {
+    margin: 0;
+}
+
+main {
+    max-width: 40rem;
+    padding: 1.5rem;
+}
+
+.alan {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+input,
+button {
+    font: inherit;
+    padding: 0.4rem 0.6rem;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* Klavye kullanıcıları için görünür odak (spec 0002 AC-26). */
+a:focus-visible,
+input:focus-visible,
+button:focus-visible {
+    outline: 3px solid var(--vurgu);
+    outline-offset: 2px;
+}
+
+.alan-hatasi,
+.hata-ozeti {
+    color: var(--hata);
+}
+
+.hata-ozeti {
+    border: 1px solid var(--hata);
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 1rem;
+}

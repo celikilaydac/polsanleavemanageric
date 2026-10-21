@@ -1,0 +1,15 @@
+@page
+@model IndexModel
+@{
+    ViewData["Baslik"] = "Ana Sayfa";
+}
+
+<h1>Hoş geldiniz, @Model.AdSoyad</h1>
+
+<p>Rolleriniz:</p>
+<ul class="roller">
+    @foreach (var rol in Model.Roller)
+    {
+        <li>@rol</li>
+    }
+</ul>

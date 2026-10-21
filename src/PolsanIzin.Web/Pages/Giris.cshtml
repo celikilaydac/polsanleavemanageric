@@ -1,0 +1,34 @@
+@page
+@model GirisModel
+@{
+    ViewData["Baslik"] = "Giriş";
+    var epostaHatali = ViewData.ModelState[nameof(Model.Eposta)]?.Errors.Count > 0;
+    var parolaHatali = ViewData.ModelState[nameof(Model.Parola)]?.Errors.Count > 0;
+}
+
+<h1>Giriş</h1>
+
+@if (Model.GenelHata is not null)
+{
+    <div class="hata-ozeti" role="alert" id="genel-hata">@Model.GenelHata</div>
+}
+
+<form method="post" novalidate>
+    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+
+    <div class="alan">
+        <label asp-for="Eposta">E-posta</label>
+        <input asp-for="Eposta" type="email" autocomplete="username"
+               aria-describedby="Eposta-hata" aria-invalid="@(epostaHatali ? "true" : "false")" />
+        <span asp-validation-for="Eposta" id="Eposta-hata" class="alan-hatasi"></span>
+    </div>
+
+    <div class="alan">
+        <label asp-for="Parola">Parola</label>
+        <input asp-for="Parola" type="password" autocomplete="current-password"
+               aria-describedby="Parola-hata" aria-invalid="@(parolaHatali ? "true" : "false")" />
+        <span asp-validation-for="Parola" id="Parola-hata" class="alan-hatasi"></span>
+    </div>
+
+    <button type="submit">Giriş Yap</button>
+</form>
