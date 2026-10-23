@@ -29,12 +29,15 @@
 1. Her iş kuralı (BR-1…BR-16): olumlu ve olumsuz durum. BR-1 için sınırlar: hafta sonu, resmi
    tatil, tek günlük talep; yıl geçişi BR-13 ile (yıla yayılan talep reddedilir). BR-12 için:
    UTC 21:00–24:00 arası (İstanbul'da ertesi gün) `FakeTimeProvider` ile.
-2. Her domain değişmezi: bakiye negatif olamaz, son durumdan geçiş yok, denetim izi yazılır.
+2. Her domain değişmezi: bakiye negatif olamaz — eşzamanlı iki istekte de (BR-2, BR-3); son
+   durumdan geçiş yok; denetim izi yazılır.
 3. Her yasaklı bağımlılık (YB-1…YB-6): bir mimari test.
 4. Yetki: her sayfada yetkisiz erişim reddedilir; kaynak yetkisi (BR-6, BR-14, başkasının talebi)
    doğrudan POST ile de denenir — yöneticisi olan bir çalışanın talebini o yönetici dışında bir
    İK'nın onaylayamadığı dahil.
 5. Kritik akış (entegrasyon): giriş → talep oluştur → yönetici onaylar → bakiye düşer.
+6. Güvenlik başlıkları ve çerez bayrakları (`docs/security.md`): bir entegrasyon testi yanıt
+   başlıklarını doğrular.
 
 ## Fast / full split (bu proje)
 - Seçici: trait `Kategori`. `--fast` → `Kategori!=Entegrasyon` (birim + mimari + etiketsiz her

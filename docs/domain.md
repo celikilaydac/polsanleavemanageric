@@ -58,4 +58,5 @@
   başka duruma geçiş yoktur. İzinli geçişler yalnızca: `Beklemede` → `Onaylandi` | `Reddedildi` |
   `IptalEdildi`.
 - İzin bakiyesi hiçbir zaman negatif olamaz.
-- Her durum değişikliği; yapan kişi ve UTC zaman damgasıyla denetim izine yazılır.
+- Her durum değişikliği; yapan kişi ve UTC zaman damgasıyla denetim izine yazılır. Denetim
+  kayıtları değiştirilemez ve silinemez (yalnızca eklenir).
