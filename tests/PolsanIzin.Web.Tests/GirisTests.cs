@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.Extensions.Options;
 
 namespace PolsanIzin.Web.Tests;
 
@@ -144,6 +145,24 @@ public sealed class GirisSiniriTests
         Assert.Equal("Çok fazla deneme, lütfen biraz sonra tekrar deneyin", belge.QuerySelector(".hata-ozeti")?.TextContent.Trim());
         Assert.NotNull(belge.QuerySelector("main form"));
     }
+
+    [Theory]
+    [InlineData(0, 60)]
+    [InlineData(10, 0)]
+    [InlineData(10, -60)]
+    public void Acilis_GecersizSinirSecenekleri_UygulamaAcilmaz(int denemeSiniri, int pencereSaniye)
+    {
+        using var factory = new PolsanIzinFactory { DenemeSiniri = denemeSiniri, Pencere = TimeSpan.FromSeconds(pencereSaniye) };
+
+        var hata = Assert.ThrowsAny<Exception>(() => factory.Istemci());
+
+        Assert.Contains(IcHatalar(hata), h => h is OptionsValidationException);
+    }
+
+    private static IEnumerable<Exception> IcHatalar(Exception hata) =>
+        hata is AggregateException toplu
+            ? toplu.InnerExceptions.SelectMany(IcHatalar).Prepend(hata)
+            : hata.InnerException is { } ic ? IcHatalar(ic).Prepend(hata) : [hata];
 
     [Fact]
     public async Task Post_SonrakiPencere_YenidenIslenir()

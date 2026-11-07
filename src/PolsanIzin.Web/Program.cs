@@ -19,7 +19,12 @@ TakvimModulu.Kaydet(builder.Services, baglantiDizesi);
 BakiyelerModulu.Kaydet(builder.Services, baglantiDizesi);
 IzinlerModulu.Kaydet(builder.Services, baglantiDizesi);
 
-builder.Services.Configure<GirisSecenekleri>(builder.Configuration.GetSection(GirisSecenekleri.Bolum));
+// Geçersiz değer kaba kuvvet korumasını sessizce kapatmasın: uygulama açılmaz (review H-1).
+builder.Services.AddOptions<GirisSecenekleri>()
+    .Bind(builder.Configuration.GetSection(GirisSecenekleri.Bolum))
+    .Validate(s => s.DenemeSiniri >= 1 && s.Pencere > TimeSpan.Zero,
+        $"{GirisSecenekleri.Bolum}: DenemeSiniri en az 1, Pencere sıfırdan büyük olmalı.")
+    .ValidateOnStart();
 builder.Services.AddSingleton<GirisSinirlayici>();
 
 builder.Services
