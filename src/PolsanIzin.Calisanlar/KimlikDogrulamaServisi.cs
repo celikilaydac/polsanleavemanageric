@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PolsanIzin.Calisanlar.Veri;
@@ -11,8 +12,9 @@ internal sealed class KimlikDogrulamaServisi(CalisanlarDbContext db, IPasswordHa
     public static readonly Hata HataliGiris = new("GIRIS", "E-posta veya parola hatalı");
 
     // Kayıtlı olmayan e-postada da bir hash doğrulanır: yanıt süresi hesabın varlığını ele vermesin.
-    private static readonly Lazy<string> _sahteHash = new(() =>
-        new PasswordHasher<Calisan>().HashPassword(null!, Guid.NewGuid().ToString()));
+    // Sahte hash, enjekte edilen hasher'ın kendi ayarlarıyla (ör. iterasyon sayısı) ve hasher başına
+    // bir kez üretilir; her istekte üretmek bu yolu yavaşlatıp aynı sızıntıyı yaratırdı.
+    private static readonly ConditionalWeakTable<IPasswordHasher<Calisan>, string> _sahteHashler = [];
 
     public async Task<Sonuc<OturumBilgisi>> DogrulaAsync(string eposta, string parola, CancellationToken iptal = default)
     {
@@ -29,7 +31,8 @@ internal sealed class KimlikDogrulamaServisi(CalisanlarDbContext db, IPasswordHa
 
         if (calisan is null)
         {
-            parolaHasher.VerifyHashedPassword(null!, _sahteHash.Value, parola);
+            var sahteHash = _sahteHashler.GetValue(parolaHasher, h => h.HashPassword(null!, Guid.NewGuid().ToString()));
+            parolaHasher.VerifyHashedPassword(null!, sahteHash, parola);
             return Sonuc.Basarisiz<OturumBilgisi>(HataliGiris);
         }
 

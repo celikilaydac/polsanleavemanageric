@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using PolsanIzin.Calisanlar.Veri;
 
 namespace PolsanIzin.Calisanlar.Tests;
@@ -71,5 +73,42 @@ public sealed class KimlikDogrulamaTests : IDisposable
         });
         // Tuzlu hash: aynı parola iki çalışanda farklı saklanır.
         Assert.Equal(calisanlar.Count, calisanlar.Select(c => c.ParolaHash).Distinct().Count());
+    }
+
+    [Fact]
+    public async Task Dogrula_KayitsizEposta_SahteHashEnjekteHasherIleBirKezUretilir()
+    {
+        var hasher = new CasusHasher();
+        using var kapsam = _ortam.Servisler.CreateScope();
+        var servis = new KimlikDogrulamaServisi(kapsam.ServiceProvider.GetRequiredService<CalisanlarDbContext>(), hasher);
+
+        await servis.DogrulaAsync("yok@polsan.example", "parola", TestContext.Current.CancellationToken);
+        await servis.DogrulaAsync("yok2@polsan.example", "parola", TestContext.Current.CancellationToken);
+
+        var uretilen = Assert.Single(hasher.Uretilenler);
+        Assert.Equal([uretilen, uretilen], hasher.Dogrulananlar);
+    }
+
+    /// <summary>Gerçek hasher'ı sarar; ürettiği ve doğruladığı hash'leri kaydeder.</summary>
+    private sealed class CasusHasher : IPasswordHasher<Calisan>
+    {
+        private readonly PasswordHasher<Calisan> _gercek = new();
+
+        public List<string> Uretilenler { get; } = [];
+
+        public List<string> Dogrulananlar { get; } = [];
+
+        public string HashPassword(Calisan user, string password)
+        {
+            var hash = _gercek.HashPassword(user, password);
+            Uretilenler.Add(hash);
+            return hash;
+        }
+
+        public PasswordVerificationResult VerifyHashedPassword(Calisan user, string hashedPassword, string providedPassword)
+        {
+            Dogrulananlar.Add(hashedPassword);
+            return _gercek.VerifyHashedPassword(user, hashedPassword, providedPassword);
+        }
     }
 }
