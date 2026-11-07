@@ -50,6 +50,18 @@ public sealed class GuvenlikBasliklariTests
         Assert.Contains("samesite=lax", bayraklar);
     }
 
+    [Fact]
+    public async Task Get_DevelopmentDisindaTanimsizHost_Reddedilir()
+    {
+        using var factory = new PolsanIzinFactory { Ortam = "Production" };
+        var istemci = factory.Istemci();
+        istemci.DefaultRequestHeaders.Host = "kotu.example";
+
+        var yanit = await istemci.AlAsync("/Giris");
+
+        Assert.Equal(HttpStatusCode.BadRequest, yanit.StatusCode);
+    }
+
     private static void BasliklariDogrula(HttpResponseMessage yanit)
     {
         Assert.Equal("nosniff", Assert.Single(yanit.Headers.GetValues("X-Content-Type-Options")));
