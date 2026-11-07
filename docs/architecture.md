@@ -74,7 +74,7 @@ tests/
 | YB-1 | Bir modül başka bir modülün `internal` tiplerine, entity'lerine veya DbContext'ine erişemez. | Entity ve DbContext'ler `internal` — derleyici |
 | YB-2 | Proje referansları yukarıdaki grafiğin dışına çıkamaz; döngü yasak. | csproj referansları + `Mimari.Tests` |
 | YB-3 | `Calisanlar`, `Takvim`, `Bakiyeler` `Ortak` dışında hiçbir projeye referans veremez. | `Mimari.Tests` |
-| YB-4 | Modül projeleri `Microsoft.AspNetCore.*` assembly'lerine bağımlı olamaz. | `Mimari.Tests` |
+| YB-4 | Modül projeleri `Microsoft.AspNetCore.*` assembly'lerine bağımlı olamaz; geçişli bağımlılıklar dahil (tek istisna `Microsoft.AspNetCore.Cryptography.*`, ADR 0003). | `Mimari.Tests` |
 | YB-5 | `Web`, EF Core / `DbContext`'e doğrudan erişemez (istisna: modüllerin `Kaydet(...)` ve `SemaKur(...)` çağrıları). | `Mimari.Tests` |
 | YB-6 | `Ortak` hiçbir PolsanIzin projesine referans veremez; EF Core, `Microsoft.AspNetCore.*` ve domain tipi (entity, iş kuralı) içeremez. | `Mimari.Tests` + review |
 

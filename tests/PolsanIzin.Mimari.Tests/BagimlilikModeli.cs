@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json;
 using System.Xml.Linq;
 
 namespace PolsanIzin.Mimari.Tests;
@@ -38,6 +39,29 @@ internal static class BagimlilikModeli
                 .Where(e => e.Name.LocalName is "ProjectReference" or "PackageReference" or "FrameworkReference")
                 .Select(BasvuruAdi)
                 .ToArray());
+    }
+
+    /// <summary>
+    /// Her projenin geçişli paket kapanışı: restore'un yazdığı <c>obj/project.assets.json</c>
+    /// hedefindeki tüm kütüphaneler. Test projesinin deps.json'u işe yaramaz: <c>Web</c>'in
+    /// <c>Microsoft.AspNetCore.App</c> framework'ü oradaki AspNetCore paketlerini budar.
+    /// </summary>
+    public static IReadOnlyDictionary<string, IReadOnlyCollection<string>> GecisliPaketler()
+    {
+        var src = Path.Combine(DepoKoku(), "src");
+        return Directory.GetFiles(src, "*.csproj", SearchOption.AllDirectories).ToDictionary(
+            p => Path.GetFileNameWithoutExtension(p),
+            p =>
+            {
+                var assets = Path.Combine(Path.GetDirectoryName(p)!, "obj", "project.assets.json");
+                using var belge = JsonDocument.Parse(File.ReadAllText(assets));
+                return (IReadOnlyCollection<string>)belge.RootElement.GetProperty("targets")
+                    .EnumerateObject()
+                    .SelectMany(hedef => hedef.Value.EnumerateObject())
+                    .Select(kutuphane => kutuphane.Name.Split('/')[0])
+                    .Distinct()
+                    .ToArray();
+            });
     }
 
     private static string BasvuruAdi(XElement e)

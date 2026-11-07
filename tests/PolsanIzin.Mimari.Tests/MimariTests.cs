@@ -56,6 +56,16 @@ public class MimariTests
         Assert.Empty(MimariKurallar.YB4_AspNetCoreBasvurulari(Model(model)));
     }
 
+    [Fact]
+    public void YB4_ModulProjeleri_GecisliOlarakDaAspNetCoreaBagimliDegil()
+    {
+        var gecisli = BagimlilikModeli.GecisliPaketler();
+
+        // Model gerçekten geçişli kapanışı okuyor: parola hash'inin getirdiği kriptografi paketi görünür.
+        Assert.Contains("Microsoft.AspNetCore.Cryptography.KeyDerivation", gecisli[MimariKurallar.Calisanlar]);
+        Assert.Empty(MimariKurallar.YB4_GecisliAspNetCoreBagimliliklari(gecisli));
+    }
+
     [Theory]
     [MemberData(nameof(Modeller))]
     public void YB5_Web_EfCoreVeSqliteaDogrudanErismez(string model)

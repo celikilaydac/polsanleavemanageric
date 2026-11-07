@@ -51,6 +51,14 @@ public static class MimariKurallar
     public static IReadOnlyList<string> YB4_AspNetCoreBasvurulari(IReadOnlyDictionary<string, IReadOnlyCollection<string>> model) =>
         Ihlaller(model, [Ortak, .. Moduller], AspNetCore);
 
+    /// <summary>
+    /// YB-4'ün geçişli yarısı: girdi, proje → geçişli paket kapanışı. Tek istisna parola hash'inin
+    /// getirdiği <c>Microsoft.AspNetCore.Cryptography.*</c> (ADR 0003).
+    /// </summary>
+    public static IReadOnlyList<string> YB4_GecisliAspNetCoreBagimliliklari(IReadOnlyDictionary<string, IReadOnlyCollection<string>> model) =>
+        Ihlaller(model, [Ortak, .. Moduller], b =>
+            AspNetCore(b) && !b.StartsWith("Microsoft.AspNetCore.Cryptography.", StringComparison.Ordinal));
+
     public static IReadOnlyList<string> YB5_WebVeriErisimi(IReadOnlyDictionary<string, IReadOnlyCollection<string>> model) =>
         Ihlaller(model, [Web], VeriErisimi);
 

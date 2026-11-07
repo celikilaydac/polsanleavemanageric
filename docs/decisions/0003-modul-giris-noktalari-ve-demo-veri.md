@@ -2,6 +2,8 @@
 
 - Status: Accepted
 - Date: 2026-10-21
+- Revised: 2026-11-07 — madde 3'ün gerekçesi olgusal olarak eksikti: paket geçişli iki
+  `Microsoft.AspNetCore.Cryptography.*` assembly'si getirir (review 0002 R-3). Karar değişmedi.
 
 ## Context
 Spec 0002, demo verinin (çalışanlar, roller, resmi tatiller, izin hakları) yalnızca `Development`
@@ -24,7 +26,11 @@ Ek olarak iki araç kararı mimari testlerin yorumunu etkiliyor: parola hash'i i
    kayıt varsa eklenmez.
 3. Parolalar `Microsoft.Extensions.Identity.Core` paketindeki `PasswordHasher<T>` ile hash'lenir.
    Tip `Microsoft.AspNetCore.Identity` namespace'inde olsa da assembly'si `Microsoft.Extensions.*`
-   olduğundan YB-4'ü (assembly adına bakar) bozmaz.
+   olduğundan YB-4'ü (assembly adına bakar) doğrudan bozmaz. Paket geçişli olarak
+   `Microsoft.AspNetCore.Cryptography.Internal` ve `.KeyDerivation`'ı getirir: bunlar HTTP
+   pipeline değil, PBKDF2 kriptografi kütüphaneleridir; YB-4'ün amacını bozmadıkları için kabul
+   edilir. YB-4 testi geçişli kapanışı da tarar ve yalnızca `Microsoft.AspNetCore.Cryptography.*`'ye
+   izin verir.
 4. Her modül, `InternalsVisibleTo` ile yalnızca **kendi** test projesine açılır. YB-1 modüller
    arası erişimi yasaklar; bir modülün kendi testinin erişimi bu kapsamın dışındadır. Bu kural
    `Mimari.Tests` içinde testle korunur.

@@ -24,6 +24,7 @@ public class MimariKuralNegatifTests
         Assert.Empty(MimariKurallar.YB2_GrafDisiBasvurular(model));
         Assert.Empty(MimariKurallar.YB3_YaprakModulBasvurulari(model));
         Assert.Empty(MimariKurallar.YB4_AspNetCoreBasvurulari(model));
+        Assert.Empty(MimariKurallar.YB4_GecisliAspNetCoreBagimliliklari(model));
         Assert.Empty(MimariKurallar.YB5_WebVeriErisimi(model));
         Assert.Empty(MimariKurallar.YB6_OrtakBasvurulari(model));
     }
@@ -52,6 +53,22 @@ public class MimariKuralNegatifTests
     public void YB4_KuraliBozanReferans_IhlalBulur(string proje, string basvuru)
     {
         Assert.Single(MimariKurallar.YB4_AspNetCoreBasvurulari(Ekle(proje, basvuru)));
+    }
+
+    [Theory]
+    [InlineData(MimariKurallar.Calisanlar, "Microsoft.AspNetCore.Http.Abstractions")]
+    [InlineData(MimariKurallar.Izinler, "Microsoft.AspNetCore.Cryptography")]
+    public void YB4Gecisli_KuraliBozanPaket_IhlalBulur(string proje, string paket)
+    {
+        Assert.Single(MimariKurallar.YB4_GecisliAspNetCoreBagimliliklari(Ekle(proje, paket)));
+    }
+
+    [Theory]
+    [InlineData("Microsoft.AspNetCore.Cryptography.Internal")]
+    [InlineData("Microsoft.AspNetCore.Cryptography.KeyDerivation")]
+    public void YB4Gecisli_KriptografiPaketi_Izinli(string paket)
+    {
+        Assert.Empty(MimariKurallar.YB4_GecisliAspNetCoreBagimliliklari(Ekle(MimariKurallar.Calisanlar, paket)));
     }
 
     [Theory]
