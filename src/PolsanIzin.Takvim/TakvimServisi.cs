@@ -18,9 +18,11 @@ internal sealed class TakvimServisi(TakvimDbContext db) : ITakvimServisi
             .Select(t => t.Tarih)
             .ToListAsync(iptal)).ToHashSet();
 
+        // Gün sayısıyla döner: tarihle dönmek DateOnly.MaxValue'da AddDays(1) taşmasına yol açar.
         var sayi = 0;
-        for (var gun = baslangic; gun <= bitis; gun = gun.AddDays(1))
+        for (var i = 0; i <= bitis.DayNumber - baslangic.DayNumber; i++)
         {
+            var gun = baslangic.AddDays(i);
             if (gun.DayOfWeek is not (DayOfWeek.Saturday or DayOfWeek.Sunday) && !tatiller.Contains(gun))
             {
                 sayi++;

@@ -66,6 +66,14 @@ public sealed class IsGunuSayTests : IDisposable
     }
 
     [Fact]
+    public async Task IsGunuSay_TakviminSonGunu_TasmaYok()
+    {
+        // 9999-12-31 Cuma: bir iş günü; döngü takvimin sonunda taşmamalı (review 0001 K-3).
+        Assert.Equal(1, await SayAsync(DateOnly.MaxValue, DateOnly.MaxValue));
+        Assert.Equal(2, await SayAsync(new(9999, 12, 30), DateOnly.MaxValue));
+    }
+
+    [Fact]
     public async Task IsGunuSay_BitisBaslangictanOnce_SifirDoner()
     {
         Assert.Equal(0, await SayAsync(new(2026, 11, 6), new(2026, 11, 2)));
