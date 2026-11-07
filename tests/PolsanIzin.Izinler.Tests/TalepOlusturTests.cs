@@ -282,6 +282,28 @@ public sealed class TalepOlusturTests : IDisposable
     }
 
     [Fact]
+    public async Task TalepOlustur_BakiyeKadar_KabulEdilir()
+    {
+        // 2026-11-02 – 11-19: tam 14 iş günü = bakiye.
+        var sonuc = await OlusturAsync(IzinTuru.Yillik, T(11, 2), T(11, 19));
+
+        Assert.True(sonuc.Basarili);
+        Assert.Equal(14, sonuc.Deger.IsGunu);
+    }
+
+    [Fact]
+    public async Task TalepOlustur_MevcutRezerveVarken_KalanaGoreKarar()
+    {
+        _bakiye.Rezerveler[Guid.CreateVersion7()] = (2026, 5);
+
+        var on = await OlusturAsync(IzinTuru.Yillik, T(11, 2), T(11, 13));
+        var dokuz = await OlusturAsync(IzinTuru.Yillik, T(11, 2), T(11, 12));
+
+        Assert.Equal(BakiyeMesajlari.Yetersiz(2026, 9, 10), TekHata(on, "BR-2").Mesaj);
+        Assert.True(dokuz.Basarili);
+    }
+
+    [Fact]
     public async Task TalepOlustur_CakismaVeBakiye_IkisiBirlikteDoner()
     {
         MevcutTalep(T(11, 2), T(11, 2), TalepDurumu.Beklemede);
