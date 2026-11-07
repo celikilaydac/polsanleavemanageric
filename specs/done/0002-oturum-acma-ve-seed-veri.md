@@ -1,6 +1,6 @@
 # Spec 0002 — Oturum açma ve seed veri
 
-- Status: In progress
+- Status: Shipped
 - Mode: lite
 - Plan: `specs/plans/0002-plan.md`
 
@@ -114,72 +114,72 @@ SSO, izin talebi işlevleri (spec 0001). Bu spec, spec 0001'in önkoşuludur.
 
 ## Acceptance criteria
 **Uygulama temeli**
-- [ ] AC-1 — YB-1…YB-6'nın her biri için bir mimari test vardır ve geçer; kuralı bozan bir
+- [x] AC-1 — YB-1…YB-6'nın her biri için bir mimari test vardır ve geçer; kuralı bozan bir
   bağımlılık eklendiğinde ilgili test kırılır.
-- [ ] AC-2 — `./scripts/check` tam profili gerçek adımlarla yeşildir; `--fast` ve full-only test
+- [x] AC-2 — `./scripts/check` tam profili gerçek adımlarla yeşildir; `--fast` ve full-only test
   sayılarının toplamı tüm testlerin sayısına eşittir.
-- [ ] AC-3 — UTC 2026-10-21 21:30 anında "bugün" 2026-10-22, UTC 2026-10-21 20:59 anında
+- [x] AC-3 — UTC 2026-10-21 21:30 anında "bugün" 2026-10-22, UTC 2026-10-21 20:59 anında
   2026-10-21'dir.
-- [ ] AC-4 — Uygulama boş bir veritabanıyla açıldığında tüm modüllerin şeması kurulur; ikinci
+- [x] AC-4 — Uygulama boş bir veritabanıyla açıldığında tüm modüllerin şeması kurulur; ikinci
   açılışta hata vermez.
 
 **Oturum açma / kapama**
-- [ ] AC-5 — Seed çalışan doğru e-posta + parolayla giriş yapar ve ana sayfaya ulaşır.
-- [ ] AC-6 — E-posta büyük harfli ve başında/sonunda boşlukla girildiğinde giriş başarılıdır.
-- [ ] AC-7 — Yanlış parola ve kayıtlı olmayan e-posta aynı mesajı ("E-posta veya parola hatalı")
+- [x] AC-5 — Seed çalışan doğru e-posta + parolayla giriş yapar ve ana sayfaya ulaşır.
+- [x] AC-6 — E-posta büyük harfli ve başında/sonunda boşlukla girildiğinde giriş başarılıdır.
+- [x] AC-7 — Yanlış parola ve kayıtlı olmayan e-posta aynı mesajı ("E-posta veya parola hatalı")
   verir; e-posta korunur, parola boşalır; oturum açılmaz.
-- [ ] AC-8 — E-posta veya parola boş gönderildiğinde ilgili alanın yanında mesaj gösterilir;
+- [x] AC-8 — E-posta veya parola boş gönderildiğinde ilgili alanın yanında mesaj gösterilir;
   oturum açılmaz.
-- [ ] AC-9 — Aynı IP'den 1 dakikalık pencerede 10 deneme işlenir; 11. deneme R-6 mesajıyla
+- [x] AC-9 — Aynı IP'den 1 dakikalık pencerede 10 deneme işlenir; 11. deneme R-6 mesajıyla
   reddedilir (doğru parolayla bile); sonraki pencerede deneme yeniden işlenir.
-- [ ] AC-10 — Oturumu olmayan kullanıcı ana sayfaya veya başka bir korumalı adrese gittiğinde
+- [x] AC-10 — Oturumu olmayan kullanıcı ana sayfaya veya başka bir korumalı adrese gittiğinde
   giriş ekranına yönlendirilir; girişten sonra istediği adrese döner.
-- [ ] AC-11 — Dönüş adresi uygulama dışını gösterdiğinde (ör. `https://kotu.example`) giriş
+- [x] AC-11 — Dönüş adresi uygulama dışını gösterdiğinde (ör. `https://kotu.example`) giriş
   sonrası ana sayfaya gidilir.
-- [ ] AC-12 — Oturumu açık kullanıcı giriş ekranını açtığında ana sayfaya yönlendirilir.
-- [ ] AC-13 — "Çıkış" sonrası giriş ekranı görünür; ana sayfa yeniden açılınca giriş istenir.
-- [ ] AC-14 — Çıkış ve giriş istekleri antiforgery doğrulaması olmadan reddedilir.
-- [ ] AC-15 — Oturum 8 saat hareketsizlikten sonra geçersizdir; 8 saatten kısa aralıklarla
+- [x] AC-12 — Oturumu açık kullanıcı giriş ekranını açtığında ana sayfaya yönlendirilir.
+- [x] AC-13 — "Çıkış" sonrası giriş ekranı görünür; ana sayfa yeniden açılınca giriş istenir.
+- [x] AC-14 — Çıkış ve giriş istekleri antiforgery doğrulaması olmadan reddedilir.
+- [x] AC-15 — Oturum 8 saat hareketsizlikten sonra geçersizdir; 8 saatten kısa aralıklarla
   kullanımda devam eder.
-- [ ] AC-16 — Saklanan parola düz metin değildir; başarılı ve başarısız giriş loglarında parola,
+- [x] AC-16 — Saklanan parola düz metin değildir; başarılı ve başarısız giriş loglarında parola,
   ad veya e-posta geçmez.
 
 **Ana sayfa ve menü**
-- [ ] AC-17 — Ana sayfa "Hoş geldiniz, <ad soyad>" ve kullanıcının rollerini Türkçe adlarıyla
+- [x] AC-17 — Ana sayfa "Hoş geldiniz, <ad soyad>" ve kullanıcının rollerini Türkçe adlarıyla
   gösterir (ör. İK-1 için "Çalışan" ve "İK").
-- [ ] AC-18 — Menüde ana sayfa ve "Çıkış" vardır; var olmayan sayfaya bağlantı yoktur.
-- [ ] AC-19 — Beklenmeyen bir hata, `Development` dışında stack trace içermeyen genel hata
+- [x] AC-18 — Menüde ana sayfa ve "Çıkış" vardır; var olmayan sayfaya bağlantı yoktur.
+- [x] AC-19 — Beklenmeyen bir hata, `Development` dışında stack trace içermeyen genel hata
   sayfası gösterir.
 
 **Seed veri**
-- [ ] AC-20 — `Development` ortamında R-16 tablosundaki 8 çalışan, rolleri ve yönetici bağları
+- [x] AC-20 — `Development` ortamında R-16 tablosundaki 8 çalışan, rolleri ve yönetici bağları
   vardır; her biri giriş yapabilir.
-- [ ] AC-21 — Seed sonrası en az iki İK vardır (BR-16); hiçbir çalışanın birden fazla yöneticisi
+- [x] AC-21 — Seed sonrası en az iki İK vardır (BR-16); hiçbir çalışanın birden fazla yöneticisi
   yoktur; hiyerarşide döngü yoktur; tam olarak bir kişinin (Genel Müdür) yöneticisi yoktur;
   kendisine bağlı çalışanı olan herkes `Yonetici` rolündedir.
-- [ ] AC-22 — Seed tatilleri R-17 listesiyle birebir aynıdır; arife günleri listede yoktur
+- [x] AC-22 — Seed tatilleri R-17 listesiyle birebir aynıdır; arife günleri listede yoktur
   (ör. 2026-10-29 tatil; 2026-03-19 Ramazan Bayramı arifesi tatil değil).
-- [ ] AC-23 — Her seed çalışanın 2026 hakkı 14 gündür; 2027 için hiçbir çalışanın hakkı yoktur.
-- [ ] AC-24 — Uygulama iki kez açıldığında çalışan, tatil ve hak sayıları değişmez.
-- [ ] AC-25 — `Development` dışındaki ortamda açılan uygulamada hiçbir çalışan, tatil veya hak
+- [x] AC-23 — Her seed çalışanın 2026 hakkı 14 gündür; 2027 için hiçbir çalışanın hakkı yoktur.
+- [x] AC-24 — Uygulama iki kez açıldığında çalışan, tatil ve hak sayıları değişmez.
+- [x] AC-25 — `Development` dışındaki ortamda açılan uygulamada hiçbir çalışan, tatil veya hak
   yoktur; seed e-postalarıyla giriş yapılamaz.
 
 **Erişilebilirlik**
-- [ ] AC-26 — Giriş formunun alanlarının görünür etiketleri vardır, hata mesajları alana bağlıdır,
+- [x] AC-26 — Giriş formunun alanlarının görünür etiketleri vardır, hata mesajları alana bağlıdır,
   parola alanı gizlidir ve form yalnızca klavyeyle doldurulup gönderilebilir.
 
 ## Definition of Done
-- [ ] Every acceptance criterion mapped to proof (test or reproducible observation)
-- [ ] `scripts/check` green
-- [ ] Independent review done; real findings fixed, noise rejected with written rationale
-- [ ] Docs / ADRs updated if behavior or architecture changed
-- [ ] Spec moved to `specs/done/` (it becomes immutable there)
+- [x] Every acceptance criterion mapped to proof (test or reproducible observation)
+- [x] `scripts/check` green
+- [x] Independent review done; real findings fixed, noise rejected with written rationale
+- [x] Docs / ADRs updated if behavior or architecture changed
+- [x] Spec moved to `specs/done/` (it becomes immutable there)
 
 ## Scorecard (fill at ship — honest numbers make the process improvable)
 | Metric | Value |
 |---|---|
-| Spec revisions | |
-| Fix rounds | |
-| Review findings: real / noise | |
-| Regressions introduced | |
-| Bugs escaped to production | |
+| Spec revisions | 0 (onaydan sonra spec değişmedi) |
+| Fix rounds | 4 (review R, re-review F, VERIFY V, re-review H; son review J temiz) |
+| Review findings: real / noise | 13 real / 2 noise; 3 takip işi (H-3, H-4, J-1 → spec 0003). VERIFY: 2 real (V-1 flaky, V-2) |
+| Regressions introduced | 0 |
+| Bugs escaped to production | 0 (henüz dağıtım yok) |
