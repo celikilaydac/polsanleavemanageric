@@ -9,6 +9,9 @@
 - Agents never print secret values, even when debugging.
 - `appsettings.*.local.json` gitignore'dadır. SQLite bağlantı dizesi secret sayılmaz.
 - Demo kullanıcı parolaları yalnızca `Development` seed verisinde bulunur; başka ortamda seed çalışmaz.
+  Tek istisna, aynı demo parolanın entegrasyon testlerinin yardımcı sınıfındaki kopyasıdır
+  (`tests/PolsanIzin.Web.Tests/TestYardimcilari.cs`): Web testleri modülün `internal` seed verisine
+  erişemez (ADR 0003). Gerçek bir secret değildir.
 
 ## Data
 - Gerçek kişisel veri girilmez. Seed, demo ve test verisi kurgusaldır; e-postalar ayrılmış
@@ -46,8 +49,11 @@
 - **Kaba kuvvet koruması:** giriş POST'u IP başına sabit pencereli bir sayaçla (`GirisSinirlayici`)
   dakikada 10 denemeyle sınırlıdır; aşımda 429 ve genel Türkçe mesaj döner. Hesap kilitleme MVP
   kapsamı dışıdır.
-  - Pencere `TimeProvider` ile ölçülür ki test deterministik olsun; yerleşik
-    `System.Threading.RateLimiting` gerçek saate bağlıdır (spec 0002 VERIFY V-1).
+  - Pencere `TimeProvider`'ın tekdüze zaman damgasıyla ölçülür ki test deterministik olsun ve
+    sistem saati değişince pencere kaymasın; yerleşik `System.Threading.RateLimiting` gerçek saate
+    bağlıdır (spec 0002 VERIFY V-1, review H-2).
+  - Geçersiz limit veya pencere (`DenemeSiniri < 1`, `Pencere <= 0`) uygulamanın açılmasını
+    engeller; koruma sessizce kapanamaz (review H-1).
   - Limit options ile yapılandırılır (sabit kodlanmaz); entegrasyon test factory'si override eder.
   - IP'si `null` olan istekler (ör. TestServer) için açık bir bölüm anahtarı tanımlanır.
   - Ters vekil arkasına çıkılırsa önce `ForwardedHeaders` yapılandırılır; yoksa tüm kullanıcılar
