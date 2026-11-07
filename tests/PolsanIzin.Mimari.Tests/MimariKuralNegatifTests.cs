@@ -29,6 +29,39 @@ public class MimariKuralNegatifTests
         Assert.Empty(MimariKurallar.YB6_OrtakBasvurulari(model));
     }
 
+    [Fact]
+    public void YB1_GecerliTipler_IhlalYok()
+    {
+        MimariKurallar.TipBilgisi[] tipler =
+        [
+            new("PolsanIzin.Calisanlar.Veri.Calisan", Public: false, DbContext: false, Entity: true, VeriNamespaceinde: true),
+            new("PolsanIzin.Calisanlar.Veri.CalisanlarDbContext", Public: false, DbContext: true, Entity: false, VeriNamespaceinde: true),
+            new("PolsanIzin.Calisanlar.OturumBilgisi", Public: true, DbContext: false, Entity: false, VeriNamespaceinde: false),
+        ];
+
+        Assert.Empty(MimariKurallar.YB1_PublicVeriTipleri(tipler));
+        Assert.Empty(MimariKurallar.YB1_InternalsVisibleToIhlalleri([(MimariKurallar.Calisanlar, "PolsanIzin.Calisanlar.Tests")]));
+    }
+
+    [Theory]
+    [InlineData(true, false, false)] // public DbContext
+    [InlineData(false, true, false)] // .Veri dışında public entity
+    [InlineData(false, false, true)] // .Veri namespace'inde public tip
+    public void YB1_KuraliBozanTip_IhlalBulur(bool dbContext, bool entity, bool veriNamespaceinde)
+    {
+        var tip = new MimariKurallar.TipBilgisi("PolsanIzin.Takvim.Bozuk", Public: true, dbContext, entity, veriNamespaceinde);
+
+        Assert.Equal("PolsanIzin.Takvim.Bozuk", Assert.Single(MimariKurallar.YB1_PublicVeriTipleri([tip])));
+    }
+
+    [Theory]
+    [InlineData(MimariKurallar.Calisanlar, MimariKurallar.Izinler)]
+    [InlineData(MimariKurallar.Takvim, "PolsanIzin.Calisanlar.Tests")]
+    public void YB1_KuraliBozanInternalsVisibleTo_IhlalBulur(string assembly, string hedef)
+    {
+        Assert.Equal($"{assembly} -> {hedef}", Assert.Single(MimariKurallar.YB1_InternalsVisibleToIhlalleri([(assembly, hedef)])));
+    }
+
     [Theory]
     [InlineData(MimariKurallar.Calisanlar, MimariKurallar.Izinler)]
     [InlineData(MimariKurallar.Izinler, MimariKurallar.Web)]

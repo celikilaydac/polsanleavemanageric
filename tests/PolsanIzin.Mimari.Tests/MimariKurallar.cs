@@ -29,6 +29,17 @@ public static class MimariKurallar
         [Web] = [Ortak, Calisanlar, Takvim, Bakiyeler, Izinler],
     };
 
+    /// <summary>YB-1 girdisi: bir modül tipinin kurala ilişkin özellikleri.</summary>
+    public sealed record TipBilgisi(string Ad, bool Public, bool DbContext, bool Entity, bool VeriNamespaceinde);
+
+    /// <summary>YB-1: DbContext, entity (bir DbContext'in <c>DbSet</c>'i) ve <c>.Veri</c> tipleri public olamaz.</summary>
+    public static IReadOnlyList<string> YB1_PublicVeriTipleri(IEnumerable<TipBilgisi> tipler) =>
+        [.. tipler.Where(t => t.Public && (t.DbContext || t.Entity || t.VeriNamespaceinde)).Select(t => t.Ad)];
+
+    /// <summary>YB-1: bir assembly <c>InternalsVisibleTo</c> ile yalnızca kendi test projesine açılır (ADR 0003).</summary>
+    public static IReadOnlyList<string> YB1_InternalsVisibleToIhlalleri(IEnumerable<(string Assembly, string Hedef)> acilimlar) =>
+        [.. acilimlar.Where(a => a.Hedef != a.Assembly + ".Tests").Select(a => $"{a.Assembly} -> {a.Hedef}")];
+
     public static IReadOnlyList<string> YB2_GrafDisiBasvurular(IReadOnlyDictionary<string, IReadOnlyCollection<string>> model)
     {
         ArgumentNullException.ThrowIfNull(model);

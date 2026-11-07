@@ -14,25 +14,28 @@ public class MimariTests
     [Fact]
     public void YB1_DbContextVeEntityler_PublicDegil()
     {
-        var publicVeriTipleri = BagimlilikModeli.Assemblyler
-            .SelectMany(a => a.GetTypes())
-            .Where(t => t.IsVisible && (DbContextTuruMu(t) || VeriNamespaceindeMi(t)))
-            .Select(t => t.FullName)
-            .ToList();
+        var tipler = BagimlilikModeli.Assemblyler.SelectMany(a => a.GetTypes()).ToList();
+        var entityler = tipler
+            .Where(DbContextTuruMu)
+            .SelectMany(c => c.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            .Select(p => p.PropertyType)
+            .Where(t => t.IsGenericType && t.GetGenericTypeDefinition().FullName == "Microsoft.EntityFrameworkCore.DbSet`1")
+            .Select(t => t.GetGenericArguments()[0])
+            .ToHashSet();
 
-        Assert.Empty(publicVeriTipleri);
+        // Model gerçekten entity'leri buluyor: aksi halde kural boş girdiyle sessizce geçerdi.
+        Assert.NotEmpty(entityler);
+        Assert.Empty(MimariKurallar.YB1_PublicVeriTipleri(tipler.Select(t => new MimariKurallar.TipBilgisi(
+            t.FullName!, t.IsVisible, DbContextTuruMu(t), entityler.Contains(t), VeriNamespaceindeMi(t)))));
     }
 
     [Fact]
     public void YB1_InternalsVisibleTo_YalnizcaKendiTestProjesine()
     {
-        var ihlaller = BagimlilikModeli.Assemblyler
-            .SelectMany(a => a.GetCustomAttributes<InternalsVisibleToAttribute>()
-                .Where(i => i.AssemblyName != a.GetName().Name + ".Tests")
-                .Select(i => $"{a.GetName().Name} -> {i.AssemblyName}"))
-            .ToList();
+        var acilimlar = BagimlilikModeli.Assemblyler.SelectMany(a => a.GetCustomAttributes<InternalsVisibleToAttribute>()
+            .Select(i => (a.GetName().Name!, i.AssemblyName)));
 
-        Assert.Empty(ihlaller);
+        Assert.Empty(MimariKurallar.YB1_InternalsVisibleToIhlalleri(acilimlar));
     }
 
     [Theory]
