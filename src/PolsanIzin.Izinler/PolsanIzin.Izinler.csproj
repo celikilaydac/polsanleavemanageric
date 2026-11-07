@@ -5,6 +5,8 @@
     <ProjectReference Include="..\PolsanIzin.Calisanlar\PolsanIzin.Calisanlar.csproj" />
     <ProjectReference Include="..\PolsanIzin.Takvim\PolsanIzin.Takvim.csproj" />
     <ProjectReference Include="..\PolsanIzin.Bakiyeler\PolsanIzin.Bakiyeler.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
