@@ -1,6 +1,6 @@
 # Spec 0001 — İzin talebi giriş ekranı
 
-- Status: Approved
+- Status: In progress
 - Mode: lite
 - Plan: `specs/plans/0001-plan.md`
 
