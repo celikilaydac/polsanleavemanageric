@@ -26,7 +26,7 @@ public sealed class GirisSinirlayici(IOptions<GirisSecenekleri> secenekler, Time
     public const string BilinmeyenIp = "bilinmeyen";
 
     /// <summary>Bu sayının üstünde, yeni pencere açılırken süresi dolmuş IP kayıtları temizlenir.</summary>
-    private const int TemizlikEsigi = 1024;
+    private const int _temizlikEsigi = 1024;
 
     private readonly GirisSecenekleri _s = secenekler.Value;
     private readonly Dictionary<string, (DateTimeOffset Baslangic, int Sayi)> _pencereler = [];
@@ -50,7 +50,7 @@ public sealed class GirisSinirlayici(IOptions<GirisSecenekleri> secenekler, Time
                 return true;
             }
 
-            if (_pencereler.Count > TemizlikEsigi)
+            if (_pencereler.Count > _temizlikEsigi)
             {
                 foreach (var eski in _pencereler.Where(k => simdi - k.Value.Baslangic >= _s.Pencere).Select(k => k.Key).ToList())
                 {
