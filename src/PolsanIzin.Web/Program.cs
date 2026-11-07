@@ -59,6 +59,8 @@ TakvimModulu.SemaKur(app.Services, demoVeriYukle);
 BakiyelerModulu.SemaKur(app.Services, demoVeriYukle);
 IzinlerModulu.SemaKur(app.Services, demoVeriYukle);
 
+app.UseGuvenlikBasliklari();
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Hata");

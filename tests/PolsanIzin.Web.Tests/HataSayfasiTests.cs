@@ -9,7 +9,7 @@ namespace PolsanIzin.Web.Tests;
 public sealed class HataSayfasiTests
 {
     /// <summary>Üretim koduna hata fırlatan sayfa eklemeden beklenmeyen hata üretir (plan Risk 8).</summary>
-    private sealed class PatlayanKimlikDogrulama : IKimlikDogrulamaServisi
+    internal sealed class PatlayanKimlikDogrulama : IKimlikDogrulamaServisi
     {
         public Task<Sonuc<OturumBilgisi>> DogrulaAsync(string eposta, string parola, CancellationToken iptal = default) =>
             throw new InvalidOperationException("GIZLI-IC-AYRINTI: veritabanı bağlantısı koptu");
