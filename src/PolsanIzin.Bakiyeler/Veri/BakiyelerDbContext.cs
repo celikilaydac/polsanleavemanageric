@@ -10,6 +10,8 @@ internal sealed class BakiyelerDbContext(DbContextOptions<BakiyelerDbContext> op
 
     public DbSet<IzinHakki> IzinHaklari => Set<IzinHakki>();
 
+    public DbSet<BakiyeHareketi> BakiyeHareketleri => Set<BakiyeHareketi>();
+
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<DateTimeOffset>().HaveConversion<UtcTicksDonusturucu>();
@@ -22,6 +24,15 @@ internal sealed class BakiyelerDbContext(DbContextOptions<BakiyelerDbContext> op
         {
             e.ToTable("IzinHaklari");
             e.HasKey(h => new { h.CalisanId, h.Yil });
+        });
+
+        modelBuilder.Entity<BakiyeHareketi>(e =>
+        {
+            e.ToTable("BakiyeHareketleri");
+            e.HasKey(h => h.Id);
+            e.HasIndex(h => h.TalepId).IsUnique();
+            e.HasIndex(h => new { h.CalisanId, h.Yil });
+            e.Property(h => h.Tur).HasMaxLength(20);
         });
     }
 }

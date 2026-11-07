@@ -17,6 +17,39 @@ namespace PolsanIzin.Bakiyeler.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.13");
 
+            modelBuilder.Entity("PolsanIzin.Bakiyeler.Veri.BakiyeHareketi", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CalisanId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Gun")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("TalepId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Tur")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Yil")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TalepId")
+                        .IsUnique();
+
+                    b.HasIndex("CalisanId", "Yil");
+
+                    b.ToTable("BakiyeHareketleri", (string)null);
+                });
+
             modelBuilder.Entity("PolsanIzin.Bakiyeler.Veri.IzinHakki", b =>
                 {
                     b.Property<Guid>("CalisanId")

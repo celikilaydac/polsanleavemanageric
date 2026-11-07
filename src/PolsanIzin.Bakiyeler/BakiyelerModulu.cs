@@ -11,6 +11,7 @@ public static class BakiyelerModulu
     {
         services.AddDbContext<BakiyelerDbContext>(o =>
             o.UseSqlite(baglantiDizesi, s => s.MigrationsHistoryTable(BakiyelerDbContext.GecmisTablosu)));
+        services.AddScoped<IBakiyeServisi, BakiyeServisi>();
     }
 
     public static void SemaKur(IServiceProvider services, bool demoVeriYukle)
