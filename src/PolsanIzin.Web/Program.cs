@@ -32,6 +32,9 @@ builder.Services
         o.Cookie.Name = "PolsanIzin.Oturum";
         o.Cookie.HttpOnly = true;
         o.Cookie.SameSite = SameSiteMode.Lax;
+        o.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+            ? CookieSecurePolicy.SameAsRequest
+            : CookieSecurePolicy.Always;
         // Spec 0002 R-7: 8 saat hareketsizlik. Varsayılan kayan süre çerezi yalnızca sürenin yarısı
         // geçince yeniler; her istekte yenileyerek "son istekten itibaren 8 saat" sağlanır (plan Risk 4).
         o.ExpireTimeSpan = TimeSpan.FromHours(8);

@@ -53,8 +53,17 @@ public class PolsanIzinFactory : WebApplicationFactory<Program>
         return this;
     }
 
+    /// <summary>
+    /// HTTPS üzerinden konuşur: <c>Development</c> dışında oturum çerezi <c>Secure</c>'dur
+    /// (docs/security.md) ve düz HTTP'de geri gönderilmez.
+    /// </summary>
     public HttpClient Istemci() =>
-        CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false, HandleCookies = true });
+        CreateClient(new WebApplicationFactoryClientOptions
+        {
+            BaseAddress = new Uri("https://localhost"),
+            AllowAutoRedirect = false,
+            HandleCookies = true,
+        });
 
     public long Say(string tablo)
     {

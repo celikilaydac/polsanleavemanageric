@@ -18,7 +18,7 @@ public sealed class OturumTests : IDisposable
         var yanit = await _factory.Istemci().AlAsync(adres);
 
         Assert.Equal(HttpStatusCode.Redirect, yanit.StatusCode);
-        Assert.StartsWith("http://localhost/Giris?ReturnUrl=", yanit.Konum(), StringComparison.Ordinal);
+        Assert.StartsWith("https://localhost/Giris?ReturnUrl=", yanit.Konum(), StringComparison.Ordinal);
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public sealed class OturumTests : IDisposable
         Assert.Equal("/Giris", yanit.Konum());
         var anaSayfa = await istemci.AlAsync("/");
         Assert.Equal(HttpStatusCode.Redirect, anaSayfa.StatusCode);
-        Assert.StartsWith("http://localhost/Giris", anaSayfa.Konum(), StringComparison.Ordinal);
+        Assert.StartsWith("https://localhost/Giris", anaSayfa.Konum(), StringComparison.Ordinal);
     }
 
     [Fact]
@@ -104,7 +104,7 @@ public sealed class OturumTests : IDisposable
         var yanit = await istemci.AlAsync("/");
 
         Assert.Equal(HttpStatusCode.Redirect, yanit.StatusCode);
-        Assert.StartsWith("http://localhost/Giris", yanit.Konum(), StringComparison.Ordinal);
+        Assert.StartsWith("https://localhost/Giris", yanit.Konum(), StringComparison.Ordinal);
     }
 
     [Fact]
