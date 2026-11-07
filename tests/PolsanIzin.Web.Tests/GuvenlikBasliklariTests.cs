@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using PolsanIzin.Calisanlar;
 
@@ -34,12 +35,24 @@ public sealed class GuvenlikBasliklariTests
         BasliklariDogrula(yanit);
     }
 
-    [Fact]
-    public async Task Giris_ProductionOrtami_OturumCereziSecureHttpOnlyLax()
+    /// <summary>
+    /// Düz HTTP isteğinde de <c>Secure</c>: <c>SecurePolicy=Always</c>'ı <c>SameAsRequest</c>'ten
+    /// ayıran durum budur (VERIFY V-2).
+    /// </summary>
+    [Theory]
+    [InlineData("https://localhost")]
+    [InlineData("http://localhost")]
+    public async Task Giris_ProductionOrtami_OturumCereziSecureHttpOnlyLax(string tabanAdres)
     {
         using var factory = new PolsanIzinFactory { Ortam = "Production" };
+        var istemci = factory.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            BaseAddress = new Uri(tabanAdres),
+            AllowAutoRedirect = false,
+            HandleCookies = true,
+        });
 
-        var yanit = await factory.Istemci().GirisYapmisAsync();
+        var yanit = await istemci.GirisYapmisAsync();
 
         var cerez = Assert.Single(
             yanit.Headers.GetValues("Set-Cookie"),
