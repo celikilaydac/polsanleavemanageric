@@ -22,8 +22,9 @@ ASPNETCORE_ENVIRONMENT=Development dotnet run --project src/PolsanIzin.Web   # P
   gitignore'da) ve şemalar kurulur, demo veri yüklenir: 8 kurgusal çalışan, 2026–2027 resmi
   tatilleri, 2026 izin hakları (spec 0002, ADR 0003). Diğer ortamlarda demo veri yüklenmez.
 - Demo kullanıcıların e-postaları ve ortak demo parolası Calisanlar modülünün demo verisindedir:
-  `src/PolsanIzin.Calisanlar/Veri/DemoVeri.cs`. Parola yalnızca bu Development seed verisinde
-  tutulur, başka yere kopyalanmaz.
+  `src/PolsanIzin.Calisanlar/Veri/DemoVeri.cs`. Parola yalnızca bu Development seed verisinde ve
+  entegrasyon testlerinin yardımcı sınıfında (`tests/PolsanIzin.Web.Tests/TestYardimcilari.cs`)
+  bulunur; başka yere kopyalanmaz.
 - Migration eklemek için yerel araç: `dotnet tool restore`, sonra
   `dotnet ef migrations add <Ad> --project src/PolsanIzin.<Modul> --startup-project src/PolsanIzin.<Modul>`.
 
