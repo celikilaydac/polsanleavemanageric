@@ -148,15 +148,19 @@ public sealed class GirisSiniriTests
     [Fact]
     public async Task Post_SonrakiPencere_YenidenIslenir()
     {
-        // Gerçek 1 dakika beklememek için pencere kısaltılır; sabit pencere davranışı aynıdır (plan Risk 5).
-        using var factory = new PolsanIzinFactory { DenemeSiniri = 2, Pencere = TimeSpan.FromSeconds(1) };
+        // Pencere TimeProvider ile ölçülür; zaman FakeTimeProvider ile ilerletilir (gerçek bekleme yok).
+        using var factory = new PolsanIzinFactory { DenemeSiniri = 2 };
         var istemci = factory.Istemci();
 
         await istemci.GirisYapAsync("ik1@polsan.example", "yanlis-parola");
         await istemci.GirisYapAsync("ik1@polsan.example", "yanlis-parola");
         Assert.Equal(HttpStatusCode.TooManyRequests, (await istemci.GirisYapAsync("ik1@polsan.example", DemoKullanicilar.Parola)).StatusCode);
 
-        await Task.Delay(TimeSpan.FromSeconds(1.5), TestContext.Current.CancellationToken);
+        // Pencere bitmeden bir an önce hâlâ reddedilir.
+        factory.Zaman.Advance(factory.Pencere - TimeSpan.FromTicks(1));
+        Assert.Equal(HttpStatusCode.TooManyRequests, (await istemci.GirisYapAsync("ik1@polsan.example", DemoKullanicilar.Parola)).StatusCode);
+
+        factory.Zaman.Advance(TimeSpan.FromTicks(1));
 
         var yanit = await istemci.GirisYapAsync("ik1@polsan.example", DemoKullanicilar.Parola);
         Assert.Equal(HttpStatusCode.Redirect, yanit.StatusCode);

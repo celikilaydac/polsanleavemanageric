@@ -43,9 +43,11 @@
   kalıcı değil, 8 saat hareketsizlikte düşer. Çıkış yalnızca antiforgery korumalı POST'tur.
 - **Kullanıcı keşfi yok:** başarısız girişte tek, genel mesaj ("E-posta veya parola hatalı");
   bilinmeyen e-postada da hash doğrulaması yapılır (yanıt süresi kullanıcı varlığını sızdırmaz).
-- **Kaba kuvvet koruması:** giriş POST'u ASP.NET Core yerleşik rate limiter ile IP başına
+- **Kaba kuvvet koruması:** giriş POST'u IP başına sabit pencereli bir sayaçla (`GirisSinirlayici`)
   dakikada 10 denemeyle sınırlıdır; aşımda 429 ve genel Türkçe mesaj döner. Hesap kilitleme MVP
   kapsamı dışıdır.
+  - Pencere `TimeProvider` ile ölçülür ki test deterministik olsun; yerleşik
+    `System.Threading.RateLimiting` gerçek saate bağlıdır (spec 0002 VERIFY V-1).
   - Limit options ile yapılandırılır (sabit kodlanmaz); entegrasyon test factory'si override eder.
   - IP'si `null` olan istekler (ör. TestServer) için açık bir bölüm anahtarı tanımlanır.
   - Ters vekil arkasına çıkılırsa önce `ForwardedHeaders` yapılandırılır; yoksa tüm kullanıcılar

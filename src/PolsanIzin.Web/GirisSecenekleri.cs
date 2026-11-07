@@ -1,4 +1,3 @@
-using System.Threading.RateLimiting;
 using Microsoft.Extensions.Options;
 
 namespace PolsanIzin.Web;
@@ -16,36 +15,51 @@ public sealed class GirisSecenekleri
 }
 
 /// <summary>
-/// IP başına sabit pencereli giriş denemesi sınırlayıcısı (yerleşik System.Threading.RateLimiting).
-/// Giriş sayfası içinde uygulanır ki reddedilen deneme formu ve Türkçe mesajı aynı sayfada görsün.
+/// IP başına sabit pencereli giriş denemesi sınırlayıcısı. Giriş sayfası içinde uygulanır ki
+/// reddedilen deneme formu ve Türkçe mesajı aynı sayfada görsün. Pencere <see cref="TimeProvider"/>
+/// ile ölçülür: yerleşik System.Threading.RateLimiting gerçek saate bağlıdır ve testte
+/// deterministik değildir (VERIFY V-1, R-03).
 /// </summary>
-public sealed class GirisSinirlayici : IDisposable
+public sealed class GirisSinirlayici(IOptions<GirisSecenekleri> secenekler, TimeProvider zaman)
 {
     /// <summary>IP'si bilinmeyen istekler (ör. TestServer) için açık bölüm anahtarı.</summary>
     public const string BilinmeyenIp = "bilinmeyen";
 
-    private readonly PartitionedRateLimiter<string> _sinirlayici;
+    /// <summary>Bu sayının üstünde, yeni pencere açılırken süresi dolmuş IP kayıtları temizlenir.</summary>
+    private const int TemizlikEsigi = 1024;
 
-    public GirisSinirlayici(IOptions<GirisSecenekleri> secenekler)
-    {
-        ArgumentNullException.ThrowIfNull(secenekler);
-        var s = secenekler.Value;
-        _sinirlayici = PartitionedRateLimiter.Create<string, string>(ip =>
-            RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
-            {
-                PermitLimit = s.DenemeSiniri,
-                Window = s.Pencere,
-                QueueLimit = 0,
-                AutoReplenishment = true,
-            }));
-    }
+    private readonly GirisSecenekleri _s = secenekler.Value;
+    private readonly Dictionary<string, (DateTimeOffset Baslangic, int Sayi)> _pencereler = [];
+    private readonly Lock _kilit = new();
 
     /// <summary>Denemeye izin varsa <c>true</c>; pencere dolmuşsa <c>false</c>.</summary>
     public bool DenemeyeIzinVer(string? ip)
     {
-        using var izin = _sinirlayici.AttemptAcquire(ip ?? BilinmeyenIp);
-        return izin.IsAcquired;
-    }
+        var anahtar = ip ?? BilinmeyenIp;
+        var simdi = zaman.GetUtcNow();
+        lock (_kilit)
+        {
+            if (_pencereler.TryGetValue(anahtar, out var p) && simdi - p.Baslangic < _s.Pencere)
+            {
+                if (p.Sayi >= _s.DenemeSiniri)
+                {
+                    return false;
+                }
 
-    public void Dispose() => _sinirlayici.Dispose();
+                _pencereler[anahtar] = (p.Baslangic, p.Sayi + 1);
+                return true;
+            }
+
+            if (_pencereler.Count > TemizlikEsigi)
+            {
+                foreach (var eski in _pencereler.Where(k => simdi - k.Value.Baslangic >= _s.Pencere).Select(k => k.Key).ToList())
+                {
+                    _pencereler.Remove(eski);
+                }
+            }
+
+            _pencereler[anahtar] = (simdi, 1);
+            return true;
+        }
+    }
 }
