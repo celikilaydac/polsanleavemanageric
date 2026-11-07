@@ -11,6 +11,7 @@ public static class TakvimModulu
     {
         services.AddDbContext<TakvimDbContext>(o =>
             o.UseSqlite(baglantiDizesi, s => s.MigrationsHistoryTable(TakvimDbContext.GecmisTablosu)));
+        services.AddScoped<ITakvimServisi, TakvimServisi>();
     }
 
     public static void SemaKur(IServiceProvider services, bool demoVeriYukle)
