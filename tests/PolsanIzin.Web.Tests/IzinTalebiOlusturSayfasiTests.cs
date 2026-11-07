@@ -15,7 +15,7 @@ namespace PolsanIzin.Web.Tests;
 [Trait("Kategori", "Entegrasyon")]
 public sealed class IzinTalebiOlusturSayfasiTests : IDisposable
 {
-    private const string Adres = "/Izinler/Olustur";
+    private const string _adres = "/Izinler/Olustur";
 
     private readonly PolsanIzinFactory _factory = new();
 
@@ -48,9 +48,9 @@ public sealed class IzinTalebiOlusturSayfasiTests : IDisposable
     {
         var form = new Dictionary<string, string>(alanlar)
         {
-            ["__RequestVerificationToken"] = await istemci.TokenAlAsync(Adres),
+            ["__RequestVerificationToken"] = await istemci.TokenAlAsync(_adres),
         };
-        return await istemci.PostAsync(Adres, new FormUrlEncodedContent(form), Iptal);
+        return await istemci.PostAsync(_adres, new FormUrlEncodedContent(form), Iptal);
     }
 
     private static Dictionary<string, string> Form(string tur, string baslangic, string bitis, string aciklama = "") => new()
@@ -192,8 +192,8 @@ public sealed class IzinTalebiOlusturSayfasiTests : IDisposable
     {
         var istemci = _factory.Istemci();
 
-        var get = await istemci.AlAsync(Adres);
-        var post = await istemci.PostAsync(Adres, new FormUrlEncodedContent(Form("Mazeret", "2026-11-02", "2026-11-02")), Iptal);
+        var get = await istemci.AlAsync(_adres);
+        var post = await istemci.PostAsync(_adres, new FormUrlEncodedContent(Form("Mazeret", "2026-11-02", "2026-11-02")), Iptal);
 
         Assert.Equal(HttpStatusCode.Redirect, get.StatusCode);
         Assert.StartsWith("https://localhost/Giris", get.Konum(), StringComparison.Ordinal);
@@ -239,7 +239,7 @@ public sealed class IzinTalebiOlusturSayfasiTests : IDisposable
     {
         var istemci = await GirisYapmisIstemciAsync();
 
-        var belge = await (await istemci.AlAsync(Adres)).HtmlAsync();
+        var belge = await (await istemci.AlAsync(_adres)).HtmlAsync();
 
         FormBos(belge);
         Assert.Equal("Seçiniz", belge.QuerySelector<IHtmlSelectElement>("#IzinTuru")!.SelectedOptions.Single().TextContent);
@@ -255,7 +255,7 @@ public sealed class IzinTalebiOlusturSayfasiTests : IDisposable
         _factory.Zaman.SetUtcNow(new DateTimeOffset(2027, 1, 4, 9, 0, 0, TimeSpan.Zero));
         var istemci = await GirisYapmisIstemciAsync();
 
-        var belge = await (await istemci.AlAsync(Adres)).HtmlAsync();
+        var belge = await (await istemci.AlAsync(_adres)).HtmlAsync();
 
         Assert.Equal("Bu yıl için izin hakkınız tanımlı değil", Metin(belge, "#bakiye"));
     }
