@@ -1,0 +1,86 @@
+@page
+@model OlusturModel
+@{
+    ViewData["Baslik"] = "İzin Talebi Oluştur";
+
+    IReadOnlyList<string> Hatalar(string alan) =>
+        ViewData.ModelState[alan]?.Errors.Select(e => e.ErrorMessage).ToList() ?? [];
+    string Gecersiz(string alan) => Hatalar(alan).Count > 0 ? "true" : "false";
+}
+
+<h1>İzin Talebi Oluştur</h1>
+
+<p class="bakiye" id="bakiye">
+    @if (Model.Bakiye is { } bakiye)
+    {
+        @:@Model.BakiyeYili yılı kullanılabilir yıllık izin bakiyeniz: <strong>@bakiye gün</strong>
+    }
+    else
+    {
+        @:Bu yıl için izin hakkınız tanımlı değil
+    }
+</p>
+
+@if (Model.Ozet is { } ozet)
+{
+    <div class="basari" role="status" id="basari">
+        <p><strong>Talebiniz oluşturuldu</strong></p>
+        <dl>
+            <dt>İzin türü</dt><dd>@OlusturModel.TurAdi(ozet.IzinTuru)</dd>
+            <dt>Başlangıç</dt><dd>@OlusturModel.TarihMetni(ozet.Baslangic)</dd>
+            <dt>Bitiş</dt><dd>@OlusturModel.TarihMetni(ozet.Bitis)</dd>
+            <dt>İş günü</dt><dd>@ozet.IsGunu</dd>
+            <dt>Durum</dt><dd>Beklemede</dd>
+        </dl>
+    </div>
+}
+
+@if (Model.GenelHatalar.Count > 0)
+{
+    <div class="hata-ozeti" role="alert" id="genel-hata">
+        <p>Talep alınmadı:</p>
+        <ul>
+            @foreach (var hata in Model.GenelHatalar)
+            {
+                <li>@hata</li>
+            }
+        </ul>
+    </div>
+}
+
+<form method="post" novalidate>
+    <div class="alan">
+        <label for="IzinTuru">İzin türü</label>
+        <select id="IzinTuru" name="IzinTuru" aria-describedby="IzinTuru-hata" aria-invalid="@Gecersiz("IzinTuru")">
+            <option value="">Seçiniz</option>
+            @foreach (var (deger, ad) in OlusturModel.Turler)
+            {
+                <option value="@deger" selected="@(Model.IzinTuru == deger.ToString())">@ad</option>
+            }
+        </select>
+        <span id="IzinTuru-hata" class="alan-hatasi">@string.Join(" ", Hatalar("IzinTuru"))</span>
+    </div>
+
+    <div class="alan">
+        <label for="Baslangic">Başlangıç tarihi</label>
+        <input id="Baslangic" name="Baslangic" type="date" value="@Model.Baslangic"
+               aria-describedby="Baslangic-hata" aria-invalid="@Gecersiz("Baslangic")" />
+        <span id="Baslangic-hata" class="alan-hatasi">@string.Join(" ", Hatalar("Baslangic"))</span>
+    </div>
+
+    <div class="alan">
+        <label for="Bitis">Bitiş tarihi</label>
+        <input id="Bitis" name="Bitis" type="date" value="@Model.Bitis"
+               aria-describedby="Bitis-hata" aria-invalid="@Gecersiz("Bitis")" />
+        <span id="Bitis-hata" class="alan-hatasi">@string.Join(" ", Hatalar("Bitis"))</span>
+    </div>
+
+    <div class="alan">
+        <label for="Aciklama">Açıklama (isteğe bağlı, en fazla 500 karakter)</label>
+        <textarea id="Aciklama" name="Aciklama" rows="3"
+                  aria-describedby="Aciklama-hata" aria-invalid="@Gecersiz("Aciklama")">@Model.Aciklama</textarea>
+        <span id="Aciklama-hata" class="alan-hatasi">@string.Join(" ", Hatalar("Aciklama"))</span>
+    </div>
+
+    <button type="submit">Talep Oluştur</button>
+</form>

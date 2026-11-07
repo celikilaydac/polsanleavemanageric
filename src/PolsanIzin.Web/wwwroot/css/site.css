@@ -46,6 +46,8 @@ main {
 }
 
 input,
+select,
+textarea,
 button {
     font: inherit;
     padding: 0.4rem 0.6rem;
@@ -58,6 +60,8 @@ button {
 /* Klavye kullanıcıları için görünür odak (spec 0002 AC-26). */
 a:focus-visible,
 input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
 button:focus-visible {
     outline: 3px solid var(--vurgu);
     outline-offset: 2px;
@@ -72,4 +76,22 @@ button:focus-visible {
     border: 1px solid var(--hata);
     padding: 0.5rem 0.75rem;
     margin-bottom: 1rem;
+}
+
+/* Spec 0001: başarı özeti; durum yalnızca renkle değil metinle de iletilir. */
+.basari {
+    border: 1px solid #1a7f37;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.basari dl {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.25rem 1rem;
+    margin: 0;
+}
+
+.basari dd {
+    margin: 0;
 }
