@@ -144,6 +144,32 @@ public sealed class TalepSorgulariTests : IDisposable
     }
 
     [Fact]
+    public async Task Gecmis_EklemeSirasindanBagimsiz_ZamanaGore()
+    {
+        // Kimlikler (Guid v7) ekleme sırasıyla artar; zaman bunun tersi kurulur ki sıralama kimliğe
+        // değil zamana dayandığı kanıtlansın (review 0004 P-1).
+        var talep = Talep(_calisan, T(11, 2), T(11, 2));
+        Denetim(talep, TimeSpan.FromHours(2), TalepDurumu.Beklemede, TalepDurumu.Onaylandi, _baskasi);
+        Denetim(talep, TimeSpan.Zero, null, TalepDurumu.Beklemede, _calisan);
+
+        var gecmis = await ServisAsync(s => s.GecmisAsync(_calisan, Iptal));
+
+        Assert.Equal([_t0.AddHours(2), _t0], gecmis.Select(g => g.ZamanUtc));
+    }
+
+    [Fact]
+    public async Task Gecmis_EsitZaman_SonEklenenOnce()
+    {
+        var talep = Talep(_calisan, T(11, 2), T(11, 2));
+        Denetim(talep, TimeSpan.Zero, null, TalepDurumu.Beklemede, _calisan);
+        Denetim(talep, TimeSpan.Zero, TalepDurumu.Beklemede, TalepDurumu.IptalEdildi, _calisan);
+
+        var gecmis = await ServisAsync(s => s.GecmisAsync(_calisan, Iptal));
+
+        Assert.Equal([TalepDurumu.IptalEdildi, TalepDurumu.Beklemede], gecmis.Select(g => g.YeniDurum));
+    }
+
+    [Fact]
     public async Task Gecmis_YalnizKendiTalepleri()
     {
         var kendi = Talep(_calisan, T(11, 2), T(11, 2));
