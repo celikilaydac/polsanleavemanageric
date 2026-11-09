@@ -1,6 +1,8 @@
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PolsanIzin.Bakiyeler.Veri;
+using PolsanIzin.Ortak;
 
 namespace PolsanIzin.Bakiyeler.Tests;
 
@@ -132,13 +134,27 @@ public sealed class BakiyeServisiTests : IDisposable
     [Fact]
     public async Task Rezerve_EsZamanliIkiRezerve_BakiyeNegatifeDusmez()
     {
-        // Her biri tek başına sığar (10 ≤ 14), ikisi birlikte sığmaz.
-        var sonuclar = await Task.WhenAll(
-            ServisAsync(s => s.RezerveAsync(_calisan, 2026, 10, Guid.CreateVersion7(), Iptal)),
-            ServisAsync(s => s.RezerveAsync(_calisan, 2026, 10, Guid.CreateVersion7(), Iptal)));
+        // Her biri tek başına sığar (10 ≤ 14), ikisi birlikte sığmaz. SQLite'ın async çağrıları senkron
+        // çalıştığından gerçek eşzamanlılık için iki iş parçacığı aynı anda başlatılır ve senaryo
+        // tekrarlanır (review 0001 K-1).
+        for (var tur = 0; tur < 20; tur++)
+        {
+            Kullan(db => db.BakiyeHareketleri.ExecuteDelete());
+            using var basla = new ManualResetEventSlim();
 
-        Assert.Single(sonuclar, s => s.Basarili);
-        Assert.Equal(4, await ServisAsync(s => s.KullanilabilirBakiyeAsync(_calisan, 2026, Iptal)));
+            Task<Sonuc> RezerveEt() => Task.Run(() =>
+            {
+                basla.Wait(Iptal);
+                return ServisAsync(s => s.RezerveAsync(_calisan, 2026, 10, Guid.CreateVersion7(), Iptal));
+            }, Iptal);
+
+            var gorevler = new[] { RezerveEt(), RezerveEt() };
+            basla.Set();
+            var sonuclar = await Task.WhenAll(gorevler);
+
+            Assert.Single(sonuclar, s => s.Basarili);
+            Assert.Equal(4, await ServisAsync(s => s.KullanilabilirBakiyeAsync(_calisan, 2026, Iptal)));
+        }
     }
 
     [Fact]

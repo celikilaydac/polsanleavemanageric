@@ -152,18 +152,27 @@ public sealed class IzinTalebiOlusturSayfasiTests : IDisposable
     {
         var calisan = await CalisanIdAsync("ik1@polsan.example");
 
-        // Her biri tek başına sığar (10 iş günü ≤ 14), ikisi birlikte sığmaz.
-        async Task<bool> OlusturAsync(DateOnly baslangic, DateOnly bitis)
+        // Her biri tek başına sığar (10 iş günü ≤ 14), ikisi birlikte sığmaz. İki iş parçacığı aynı anda
+        // başlatılır: SQLite'ın async çağrıları senkron çalıştığından Task.WhenAll tek başına
+        // eşzamanlılık üretmez (review 0001 K-1).
+        using var basla = new ManualResetEventSlim();
+
+        Task<bool> OlusturAsync(DateOnly baslangic, DateOnly bitis) => Task.Run(async () =>
         {
+            basla.Wait(Iptal);
             using var kapsam = _factory.Services.CreateScope();
             var sonuc = await kapsam.ServiceProvider.GetRequiredService<IIzinTalebiServisi>().TalepOlusturAsync(
                 new TalepOlusturKomutu(calisan, IzinTuru.Yillik, baslangic, bitis, null), Iptal);
             return sonuc.Basarili;
-        }
+        }, Iptal);
 
-        var sonuclar = await Task.WhenAll(
+        var gorevler = new[]
+        {
             OlusturAsync(new(2026, 11, 2), new(2026, 11, 13)),
-            OlusturAsync(new(2026, 11, 16), new(2026, 11, 27)));
+            OlusturAsync(new(2026, 11, 16), new(2026, 11, 27)),
+        };
+        basla.Set();
+        var sonuclar = await Task.WhenAll(gorevler);
 
         Assert.Single(sonuclar, s => s);
         using var kapsam = _factory.Services.CreateScope();

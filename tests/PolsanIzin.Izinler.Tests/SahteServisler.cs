@@ -4,13 +4,52 @@ using PolsanIzin.Takvim;
 
 namespace PolsanIzin.Izinler.Tests;
 
+/// <summary>
+/// İki çağrının aynı noktada gerçekten iç içe geçip geçemediğini ölçer: varan çağrı, diğeri de
+/// gelene ya da zaman aşımı dolana kadar bekler (review 0001 K-1). Seri hâle getiren bir kilit
+/// varken ikinci çağrı, ilki buradayken gelemez ve <see cref="IcIceGecti"/> <c>false</c> kalır.
+/// </summary>
+internal sealed class Bulusma(int katilimci, TimeSpan zamanAsimi)
+{
+    private readonly TaskCompletionSource _tamam = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private int _icerde;
+
+    /// <summary>Aynı anda <c>katilimci</c> kadar çağrı buluşma noktasında bulundu mu?</summary>
+    public bool IcIceGecti => _tamam.Task.IsCompleted;
+
+    public async Task BekleAsync()
+    {
+        if (Interlocked.Increment(ref _icerde) >= katilimci)
+        {
+            _tamam.TrySetResult();
+        }
+
+        try
+        {
+            await Task.WhenAny(_tamam.Task, Task.Delay(zamanAsimi));
+        }
+        finally
+        {
+            Interlocked.Decrement(ref _icerde);
+        }
+    }
+}
+
 /// <summary>Hafta sonu + 2026-10-29 tatil (spec 0001 örneklerindeki takvim).</summary>
 internal sealed class SahteTakvim : ITakvimServisi
 {
     private static readonly HashSet<DateOnly> _tatiller = [new(2026, 10, 29)];
 
-    public Task<int> IsGunuSayAsync(DateOnly baslangic, DateOnly bitis, CancellationToken iptal = default)
+    /// <summary>Doluysa her çağrı önce bu buluşma noktasında bekler (eşzamanlılık testleri).</summary>
+    public Bulusma? Bulusma { get; set; }
+
+    public async Task<int> IsGunuSayAsync(DateOnly baslangic, DateOnly bitis, CancellationToken iptal = default)
     {
+        if (Bulusma is not null)
+        {
+            await Bulusma.BekleAsync();
+        }
+
         var sayi = 0;
         for (var i = 0; i <= bitis.DayNumber - baslangic.DayNumber; i++)
         {
@@ -21,7 +60,7 @@ internal sealed class SahteTakvim : ITakvimServisi
             }
         }
 
-        return Task.FromResult(sayi);
+        return sayi;
     }
 }
 

@@ -19,6 +19,7 @@ public sealed class TalepOlusturTests : IDisposable
     private readonly SqliteConnection _canliTut;
     private readonly ServiceProvider _servisler;
     private readonly SahteBakiye _bakiye = new();
+    private readonly SahteTakvim _takvim = new();
     private readonly FakeTimeProvider _zaman = new(new DateTimeOffset(2026, 10, 21, 9, 0, 0, TimeSpan.Zero));
 
     public TalepOlusturTests()
@@ -28,7 +29,7 @@ public sealed class TalepOlusturTests : IDisposable
         _canliTut.Open();
         var services = new ServiceCollection();
         IzinlerModulu.Kaydet(services, baglanti);
-        services.AddSingleton<ITakvimServisi>(new SahteTakvim());
+        services.AddSingleton<ITakvimServisi>(_takvim);
         services.AddSingleton<IBakiyeServisi>(_bakiye);
         services.AddSingleton<TimeProvider>(_zaman);
         _servisler = services.BuildServiceProvider();
@@ -399,13 +400,35 @@ public sealed class TalepOlusturTests : IDisposable
     }
 
     [Fact]
+    public async Task TalepOlustur_EsZamanliAyniAralik_YalnizBiriKabul()
+    {
+        // AC-19 / ADR 0004: iki gönderim gerçekten iç içe geçmeye zorlanır. Kilit varken ikinci çağrı
+        // buluşmaya ulaşamaz; kilit olmasaydı ikisi de çakışma kontrolünü geçip iki talep yazardı.
+        var bulusma = new Bulusma(2, TimeSpan.FromMilliseconds(300));
+        _takvim.Bulusma = bulusma;
+
+        var sonuclar = await Task.WhenAll(
+            OlusturAsync(IzinTuru.Mazeret, T(11, 2), T(11, 6)),
+            OlusturAsync(IzinTuru.Mazeret, T(11, 2), T(11, 6)));
+
+        Assert.False(bulusma.IcIceGecti);
+        Assert.Single(sonuclar, s => s.Basarili);
+        TekHata(Assert.Single(sonuclar, s => !s.Basarili), "BR-3");
+        Assert.Equal(1, Db(db => db.IzinTalepleri.Count()));
+    }
+
+    [Fact]
     public async Task TalepOlustur_EsZamanliIkiYillik_EnFazlaBiriKabul()
     {
-        // Her biri tek başına sığar (10 iş günü ≤ 14), ikisi birlikte sığmaz.
+        // Her biri tek başına sığar (10 iş günü ≤ 14), ikisi birlikte sığmaz; çağrılar iç içe geçmeye zorlanır.
+        var bulusma = new Bulusma(2, TimeSpan.FromMilliseconds(300));
+        _takvim.Bulusma = bulusma;
+
         var sonuclar = await Task.WhenAll(
             OlusturAsync(IzinTuru.Yillik, T(11, 2), T(11, 13)),
             OlusturAsync(IzinTuru.Yillik, T(11, 16), T(11, 27)));
 
+        Assert.False(bulusma.IcIceGecti);
         Assert.Single(sonuclar, s => s.Basarili);
         Assert.Equal(4, await _bakiye.KullanilabilirBakiyeAsync(_calisan, 2026, TestContext.Current.CancellationToken));
     }
