@@ -83,7 +83,8 @@ ekranı, yönetici veya İK'nın başkalarının taleplerini gördüğü ekranla
 
 **Erişilebilirlik ve salt-okunurluk**
 - [ ] AC-14 — İki tabloda da görünür `caption` ve `scope="col"` sütun başlıkları vardır; durum
-  metinle yazılır; sayfalarda form veya script yoktur.
+  metinle yazılır; sayfa içeriğinde (`main`) form yoktur ve sayfalarda script yoktur (menüdeki
+  "Çıkış" formu spec 0002'ye aittir).
 - [ ] AC-15 — Sekmeleri açmak talep, denetim veya bakiye kaydı sayısını değiştirmez.
 
 ## Definition of Done
