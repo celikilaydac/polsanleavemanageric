@@ -65,13 +65,13 @@ public sealed class TalepSorgulariTests : IDisposable
         return id;
     }
 
-    private void Denetim(Guid talepId, TimeSpan sonra, TalepDurumu? eski, TalepDurumu yeni, Guid yapan)
+    private void Denetim(Guid talepId, TimeSpan sonra, TalepDurumu? eski, TalepDurumu yeni, Guid yapan, Guid? id = null)
     {
         using var kapsam = _servisler.CreateScope();
         var db = kapsam.ServiceProvider.GetRequiredService<IzinlerDbContext>();
         db.DenetimKayitlari.Add(new DenetimKaydi
         {
-            Id = Guid.CreateVersion7(),
+            Id = id ?? Guid.CreateVersion7(),
             TalepId = talepId,
             YapanCalisanId = yapan,
             EskiDurum = eski,
@@ -158,11 +158,13 @@ public sealed class TalepSorgulariTests : IDisposable
     }
 
     [Fact]
-    public async Task Gecmis_EsitZaman_SonEklenenOnce()
+    public async Task Gecmis_EsitZaman_KimligeGoreAzalan()
     {
+        // Plan Risk 5: eşit zamanda kayıt kimliği azalan. Aynı milisaniyede üretilen Guid v7'lerin
+        // sırası rastgele kısma bağlı olduğundan kimlikler testte açıkça verilir (deterministik).
         var talep = Talep(_calisan, T(11, 2), T(11, 2));
-        Denetim(talep, TimeSpan.Zero, null, TalepDurumu.Beklemede, _calisan);
-        Denetim(talep, TimeSpan.Zero, TalepDurumu.Beklemede, TalepDurumu.IptalEdildi, _calisan);
+        Denetim(talep, TimeSpan.Zero, null, TalepDurumu.Beklemede, _calisan, new Guid("00000000-0000-7000-8000-000000000001"));
+        Denetim(talep, TimeSpan.Zero, TalepDurumu.Beklemede, TalepDurumu.IptalEdildi, _calisan, new Guid("00000000-0000-7000-8000-000000000002"));
 
         var gecmis = await ServisAsync(s => s.GecmisAsync(_calisan, Iptal));
 
