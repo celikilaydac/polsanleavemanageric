@@ -8,6 +8,7 @@
     string Gecersiz(string alan) => Hatalar(alan).Count > 0 ? "true" : "false";
 }
 
+<section class="kart">
 <h1>İzin Talebi Oluştur</h1>
 
 <p class="bakiye" id="bakiye">
@@ -56,7 +57,8 @@
 }
 
 <form method="post" novalidate>
-    <div class="alan">
+  <div class="form-izgara">
+    <div class="alan genis">
         <label for="IzinTuru">İzin türü</label>
         <select id="IzinTuru" name="IzinTuru" aria-describedby="IzinTuru-hata" aria-invalid="@Gecersiz("IzinTuru")">
             <option value="">Seçiniz</option>
@@ -82,12 +84,14 @@
         <span id="Bitis-hata" class="alan-hatasi">@string.Join(" ", Hatalar("Bitis"))</span>
     </div>
 
-    <div class="alan">
+    <div class="alan genis">
         <label for="Aciklama">Açıklama (isteğe bağlı, en fazla 500 karakter)</label>
         <textarea id="Aciklama" name="Aciklama" rows="3"
                   aria-describedby="Aciklama-hata" aria-invalid="@Gecersiz("Aciklama")">@Model.Aciklama</textarea>
         <span id="Aciklama-hata" class="alan-hatasi">@string.Join(" ", Hatalar("Aciklama"))</span>
     </div>
+  </div>
 
     <button type="submit">Talep Oluştur</button>
 </form>
+</section>

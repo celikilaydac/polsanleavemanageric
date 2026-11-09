@@ -6,7 +6,9 @@
     var parolaHatali = ViewData.ModelState[nameof(Model.Parola)]?.Errors.Count > 0;
 }
 
+<section class="kart giris-kart">
 <h1>Giriş</h1>
+<p class="aciklama-metni">PolsanIzin hesabınızla oturum açın.</p>
 
 @if (Model.GenelHata is not null)
 {
@@ -32,3 +34,4 @@
 
     <button type="submit">Giriş Yap</button>
 </form>
+</section>

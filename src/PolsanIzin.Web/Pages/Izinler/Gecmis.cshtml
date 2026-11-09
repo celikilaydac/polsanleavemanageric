@@ -4,34 +4,38 @@
     ViewData["Baslik"] = "Geçmiş";
 }
 
-<h1>Geçmiş</h1>
+<section class="kart">
+    <h1>Geçmiş</h1>
 
-@if (Model.Satirlar.Count == 0)
-{
-    <p id="bos">Henüz kayıt yok.</p>
-}
-else
-{
-    <table id="gecmis">
-        <caption>İzin taleplerimin durum geçmişi (yeniden eskiye)</caption>
-        <thead>
-            <tr>
-                <th scope="col">Zaman</th>
-                <th scope="col">Talep</th>
-                <th scope="col">Değişiklik</th>
-                <th scope="col">Yapan</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var satir in Model.Satirlar)
-            {
-                <tr>
-                    <td>@satir.Zaman</td>
-                    <td>@satir.Talep</td>
-                    <td>@satir.Degisiklik</td>
-                    <td>@satir.Yapan</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+    @if (Model.Satirlar.Count == 0)
+    {
+        <p id="bos" class="bos-durum">Henüz kayıt yok.</p>
+    }
+    else
+    {
+        <div class="tablo-kap">
+            <table id="gecmis">
+                <caption>İzin taleplerimin durum geçmişi (yeniden eskiye)</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Zaman</th>
+                        <th scope="col">Talep</th>
+                        <th scope="col">Değişiklik</th>
+                        <th scope="col">Yapan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var satir in Model.Satirlar)
+                    {
+                        <tr>
+                            <td>@satir.Zaman</td>
+                            <td>@satir.Talep</td>
+                            <td>@satir.Degisiklik</td>
+                            <td>@satir.Yapan</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
