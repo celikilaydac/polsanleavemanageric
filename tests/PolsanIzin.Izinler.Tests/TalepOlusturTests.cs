@@ -149,7 +149,10 @@ public sealed class TalepOlusturTests : IDisposable
     {
         var sonuc = await OlusturAsync(IzinTuru.Mazeret, T(11, 6), T(11, 2));
 
-        Assert.Equal(TalepAlanlari.Bitis, TekHata(sonuc, "BR-4").Alan);
+        var hata = TekHata(sonuc, "BR-4");
+        Assert.Equal(TalepAlanlari.Bitis, hata.Alan);
+        // "İş günü yok" değil, sıralama hatası söylenmeli (verify 0001 N-1).
+        Assert.Equal("Bitiş tarihi başlangıç tarihinden önce olamaz.", hata.Mesaj);
     }
 
     [Theory]
@@ -263,6 +266,17 @@ public sealed class TalepOlusturTests : IDisposable
         MevcutTalep(T(11, 2), T(11, 6), TalepDurumu.Beklemede);
 
         Assert.True((await OlusturAsync(IzinTuru.Mazeret, T(11, 9), T(11, 13))).Basarili);
+    }
+
+    [Theory]
+    [InlineData(11, 6, 11, 10)] // yeni talep mevcudun bitiş gününde başlar
+    [InlineData(10, 28, 11, 2)] // yeni talep mevcudun başlangıç gününde biter
+    public async Task TalepOlustur_SinirGunundeDegen_BR3Hatasi(int a1, int g1, int a2, int g2)
+    {
+        // Takvim günü kesişimi uçlar dahildir (verify 0001 N-2).
+        MevcutTalep(T(11, 2), T(11, 6), TalepDurumu.Beklemede);
+
+        TekHata(await OlusturAsync(IzinTuru.Mazeret, T(a1, g1), T(a2, g2)), "BR-3");
     }
 
     [Fact]
