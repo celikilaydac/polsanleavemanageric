@@ -29,14 +29,14 @@
     --uyari: #ffd166;
     --notr: #b4b8e6;
 
-    /* Türetilmiş */
+    /* Türetilmiş: tonlar taban değişkenden üretilir, palet değişince birlikte değişir. */
     --odak: var(--pembe);
     --degrade: linear-gradient(100deg, var(--mavi), var(--mor) 55%, var(--pembe));
-    --isik-mor: rgb(167 139 255 / 0.18);
-    --isik-pembe: rgb(255 122 195 / 0.12);
-    --ust-bar: rgb(13 14 36 / 0.82);
-    --hata-zemin: rgb(255 143 171 / 0.1);
-    --basari-zemin: rgb(94 224 168 / 0.1);
+    --isik-mor: color-mix(in srgb, var(--mor) 18%, transparent);
+    --isik-pembe: color-mix(in srgb, var(--pembe) 12%, transparent);
+    --ust-bar: color-mix(in srgb, var(--zemin) 82%, transparent);
+    --hata-zemin: color-mix(in srgb, var(--hata) 10%, transparent);
+    --basari-zemin: color-mix(in srgb, var(--basari) 10%, transparent);
     --golge: 0 18px 40px rgb(0 0 0 / 0.35);
 
     --yaricap: 16px;
@@ -48,6 +48,11 @@
 *::before,
 *::after {
     box-sizing: border-box;
+}
+
+/* Yapışkan üst bar, klavyeyle odaklanan öğeyi örtmesin (spec 0005 PB-2). */
+html {
+    scroll-padding-top: 5rem;
 }
 
 body {
@@ -155,10 +160,6 @@ main {
     border-radius: var(--yaricap);
     box-shadow: var(--golge);
     padding: clamp(1.25rem, 3vw, 2rem);
-}
-
-.kart + .kart {
-    margin-top: 1.25rem;
 }
 
 .giris-kart {
@@ -271,9 +272,11 @@ nav button:hover {
 /* Klavye kullanıcıları için görünür odak (spec 0002 AC-26, 0001 AC-31, 0005 PB-2). */
 a:focus-visible,
 input:focus-visible,
+input:focus-within,
 select:focus-visible,
 textarea:focus-visible,
-button:focus-visible {
+button:focus-visible,
+.tablo-kap:focus-visible {
     outline: 3px solid var(--odak);
     outline-offset: 2px;
 }
@@ -438,7 +441,9 @@ tbody tr:hover {
 
 /* Dar ekran (CB-5) */
 @media (max-width: 640px) {
+    /* Dar ekranda sarılan sekmelerle bar yükselir; yapışkan kalırsa odağı örtebilir (U-1). */
     header {
+        position: static;
         flex-direction: column;
         align-items: flex-start;
     }
@@ -458,10 +463,21 @@ tbody tr:hover {
     }
 }
 
-/* Yüksek kontrast / zorunlu renk modunda degrade metin okunur kalsın. */
+/* Yüksek kontrast / zorunlu renk modunda ve yazdırırken degrade metin okunur kalsın. */
 @media (forced-colors: active) {
     .uygulama-adi {
         color: CanvasText;
         background: none;
+    }
+}
+
+@media print {
+    .uygulama-adi {
+        color: inherit;
+        background: none;
+    }
+
+    header {
+        position: static;
     }
 }
