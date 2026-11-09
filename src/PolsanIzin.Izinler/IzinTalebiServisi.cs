@@ -33,6 +33,26 @@ internal sealed class IzinTalebiServisi(
         }
     }
 
+    public async Task<IReadOnlyList<TalepSatiri>> TaleplerAsync(Guid calisanId, CancellationToken iptal = default) =>
+        await db.IzinTalepleri
+            .AsNoTracking()
+            .Where(t => t.CalisanId == calisanId)
+            .OrderByDescending(t => t.Baslangic)
+            .ThenByDescending(t => t.Bitis)
+            .Select(t => new TalepSatiri(t.Id, t.IzinTuru, t.Baslangic, t.Bitis, t.IsGunu, t.Durum, t.Aciklama))
+            .ToListAsync(iptal);
+
+    public async Task<IReadOnlyList<GecmisKaydi>> GecmisAsync(Guid calisanId, CancellationToken iptal = default) =>
+        await db.DenetimKayitlari
+            .AsNoTracking()
+            .Join(db.IzinTalepleri, d => d.TalepId, t => t.Id, (d, t) => new { d, t })
+            .Where(x => x.t.CalisanId == calisanId)
+            .OrderByDescending(x => x.d.ZamanUtc)
+            .ThenByDescending(x => x.d.Id)
+            .Select(x => new GecmisKaydi(
+                x.d.ZamanUtc, x.t.Id, x.t.IzinTuru, x.t.Baslangic, x.t.Bitis, x.d.EskiDurum, x.d.YeniDurum, x.d.YapanCalisanId))
+            .ToListAsync(iptal);
+
     private async Task<Sonuc<TalepOzeti>> OlusturAsync(TalepOlusturKomutu komut, CancellationToken iptal)
     {
         // Tarayıcı textarea satır sonlarını "\r\n" gönderir; ekrandaki karakter sayısıyla tutarlı

@@ -11,4 +11,10 @@ public interface IIzinTalebiServisi
     /// ve hiçbir kayıt oluşmaz (R-8).
     /// </summary>
     Task<Sonuc<TalepOzeti>> TalepOlusturAsync(TalepOlusturKomutu komut, CancellationToken iptal = default);
+
+    /// <summary>Çalışanın tüm talepleri; başlangıç, sonra bitiş tarihi yeniden eskiye (spec 0004 R-2).</summary>
+    Task<IReadOnlyList<TalepSatiri>> TaleplerAsync(Guid calisanId, CancellationToken iptal = default);
+
+    /// <summary>Çalışanın taleplerine ait denetim kayıtları; zaman yeniden eskiye (spec 0004 R-3).</summary>
+    Task<IReadOnlyList<GecmisKaydi>> GecmisAsync(Guid calisanId, CancellationToken iptal = default);
 }
