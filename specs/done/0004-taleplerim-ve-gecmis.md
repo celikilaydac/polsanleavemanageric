@@ -1,6 +1,6 @@
 # Spec 0004 — Taleplerim ve Geçmiş sekmeleri
 
-- Status: In progress
+- Status: Shipped
 - Mode: lite
 - Plan: `specs/plans/0004-plan.md`
 
@@ -53,52 +53,52 @@ ekranı, yönetici veya İK'nın başkalarının taleplerini gördüğü ekranla
 Örneklerde "bugün" = 2026-10-21 (Istanbul); ik1 = Elif Kaya.
 
 **Menü ve yetki**
-- [ ] AC-1 — Oturum açık kullanıcının menüsünde "Taleplerim" ve "Geçmiş" vardır, var olan
+- [x] AC-1 — Oturum açık kullanıcının menüsünde "Taleplerim" ve "Geçmiş" vardır, var olan
   sayfalara gider; açık sekme menüde işaretlidir.
-- [ ] AC-2 — Oturumu olmayan kullanıcı iki sekmeden birini açmak istediğinde giriş ekranına
+- [x] AC-2 — Oturumu olmayan kullanıcı iki sekmeden birini açmak istediğinde giriş ekranına
   yönlendirilir.
 
 **Taleplerim**
-- [ ] AC-3 — Üç talep (Yıllık 11-02–11-06, Mazeret 11-16, Ücretsiz 12-01–12-02) oluşturulmuşken
+- [x] AC-3 — Üç talep (Yıllık 11-02–11-06, Mazeret 11-16, Ücretsiz 12-01–12-02) oluşturulmuşken
   üçü de doğru tür, tarih, iş günü (5, 1, 2), "Beklemede" ve açıklamayla, başlangıca göre
   yeniden eskiye listelenir.
-- [ ] AC-4 — Onaylandi, Reddedildi ve IptalEdildi durumundaki talepler "Onaylandı", "Reddedildi",
+- [x] AC-4 — Onaylandi, Reddedildi ve IptalEdildi durumundaki talepler "Onaylandı", "Reddedildi",
   "İptal edildi" olarak gösterilir.
-- [ ] AC-5 — Açıklaması olmayan talepte açıklama "—" gösterilir; `<b>` gibi işaretleme içeren
+- [x] AC-5 — Açıklaması olmayan talepte açıklama "—" gösterilir; `<b>` gibi işaretleme içeren
   açıklama düz metin olarak görünür.
-- [ ] AC-6 — Başka bir çalışanın talepleri listede görünmez; adrese başka çalışanın kimliği
+- [x] AC-6 — Başka bir çalışanın talepleri listede görünmez; adrese başka çalışanın kimliği
   eklense de liste değişmez.
-- [ ] AC-7 — Hiç talebi olmayan çalışan "Henüz izin talebiniz yok." görür; tablo yoktur.
+- [x] AC-7 — Hiç talebi olmayan çalışan "Henüz izin talebiniz yok." görür; tablo yoktur.
 
 **Geçmiş**
-- [ ] AC-8 — Talep oluşturulunca Geçmiş'te bir satır görünür: zaman Istanbul saatiyle
+- [x] AC-8 — Talep oluşturulunca Geçmiş'te bir satır görünür: zaman Istanbul saatiyle
   (UTC 09:00 → "21.10.2026 12:00"), talep "Yıllık 02.11.2026 – 06.11.2026", değişiklik
   "Oluşturuldu → Beklemede", yapan "Siz".
-- [ ] AC-9 — Zaman Istanbul gününe göredir: UTC 2026-10-21 21:30 kaydı "22.10.2026 00:30" görünür.
-- [ ] AC-10 — Birden fazla kayıt zamana göre yeniden eskiye sıralıdır.
-- [ ] AC-11 — Başkası tarafından yapılan durum değişikliği (ör. yöneticinin Beklemede → Onaylandi)
+- [x] AC-9 — Zaman Istanbul gününe göredir: UTC 2026-10-21 21:30 kaydı "22.10.2026 00:30" görünür.
+- [x] AC-10 — Birden fazla kayıt zamana göre yeniden eskiye sıralıdır.
+- [x] AC-11 — Başkası tarafından yapılan durum değişikliği (ör. yöneticinin Beklemede → Onaylandi)
   "Beklemede → Onaylandı" ve yapanın adı soyadıyla görünür.
-- [ ] AC-12 — Başka çalışanın taleplerine ait kayıtlar görünmez.
-- [ ] AC-13 — Hiç kaydı olmayan çalışan "Henüz kayıt yok." görür; tablo yoktur.
+- [x] AC-12 — Başka çalışanın taleplerine ait kayıtlar görünmez.
+- [x] AC-13 — Hiç kaydı olmayan çalışan "Henüz kayıt yok." görür; tablo yoktur.
 
 **Erişilebilirlik ve salt-okunurluk**
-- [ ] AC-14 — İki tabloda da görünür `caption` ve `scope="col"` sütun başlıkları vardır; durum
+- [x] AC-14 — İki tabloda da görünür `caption` ve `scope="col"` sütun başlıkları vardır; durum
   metinle yazılır; sayfa içeriğinde (`main`) form yoktur ve sayfalarda script yoktur (menüdeki
   "Çıkış" formu spec 0002'ye aittir).
-- [ ] AC-15 — Sekmeleri açmak talep, denetim veya bakiye kaydı sayısını değiştirmez.
+- [x] AC-15 — Sekmeleri açmak talep, denetim veya bakiye kaydı sayısını değiştirmez.
 
 ## Definition of Done
-- [ ] Every acceptance criterion mapped to proof (test or reproducible observation)
-- [ ] `scripts/check` green
-- [ ] Independent review done; real findings fixed, noise rejected with written rationale
-- [ ] Docs / ADRs updated if behavior or architecture changed
-- [ ] Spec moved to `specs/done/` (it becomes immutable there)
+- [x] Every acceptance criterion mapped to proof (test or reproducible observation)
+- [x] `scripts/check` green
+- [x] Independent review done; real findings fixed, noise rejected with written rationale
+- [x] Docs / ADRs updated if behavior or architecture changed
+- [x] Spec moved to `specs/done/` (it becomes immutable there)
 
 ## Scorecard (fill at ship — honest numbers make the process improvable)
 | Metric | Value |
 |---|---|
-| Spec revisions | |
-| Fix rounds | |
-| Review findings: real / noise | |
-| Regressions introduced | |
-| Bugs escaped to production | |
+| Spec revisions | 1 (AC-14 netleştirildi: form kontrolü `main` ile sınırlı; review P-2) |
+| Fix rounds | 3 (review P, re-review Q, VERIFY S); fix round içinde 1 kararsız test yakalandı ve düzeltildi |
+| Review findings: real / noise | 8 real / 1 noise (P-1…P-6, Q-1, S-1 real; Q-2 noise). VERIFY: 15/15 kanıtlı; 15 mutasyonun 14'ü yakalandı, kalan S-1 ile kapatıldı |
+| Regressions introduced | 0 |
+| Bugs escaped to production | 0 (henüz dağıtım yok) |
