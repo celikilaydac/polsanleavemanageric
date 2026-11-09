@@ -87,7 +87,7 @@ public sealed class GecmisSayfasiTests : IDisposable
         _factory.Calistir($"""
             INSERT INTO "DenetimKayitlari" ("Id", "TalepId", "YapanCalisanId", "EskiDurum", "YeniDurum", "ZamanUtc")
             SELECT upper('{Guid.CreateVersion7()}'), "Id", upper('{yonetici}'), 'Beklemede', 'Onaylandi', {zaman}
-            FROM "IzinTalepleri"
+            FROM "IzinTalepleri" WHERE "CalisanId" = upper('{ik1}')
             """);
 
         var belge = await SayfaAsync();
@@ -98,6 +98,23 @@ public sealed class GecmisSayfasiTests : IDisposable
             ["21.10.2026 14:00", "Mazeret 02.11.2026 – 02.11.2026", "Beklemede → Onaylandı", "Zeynep Yıldız"],
             satirlar[0]);
         Assert.Equal("Siz", satirlar[1][3]);
+    }
+
+    [Fact]
+    public async Task Get_BilinmeyenYapan_Tire()
+    {
+        var ik1 = await _factory.CalisanIdAsync("ik1@polsan.example");
+        await _factory.TalepAsync(ik1, IzinTuru.Mazeret, T(11, 2), T(11, 2));
+        var zaman = new DateTimeOffset(2026, 10, 21, 11, 0, 0, TimeSpan.Zero).UtcTicks;
+        _factory.Calistir($"""
+            INSERT INTO "DenetimKayitlari" ("Id", "TalepId", "YapanCalisanId", "EskiDurum", "YeniDurum", "ZamanUtc")
+            SELECT upper('{Guid.CreateVersion7()}'), "Id", upper('{Guid.CreateVersion7()}'), 'Beklemede', 'Reddedildi', {zaman}
+            FROM "IzinTalepleri" WHERE "CalisanId" = upper('{ik1}')
+            """);
+
+        var belge = await SayfaAsync();
+
+        Assert.Equal(["Beklemede → Reddedildi", "—"], Satirlar(belge)[0][2..]);
     }
 
     [Fact]
