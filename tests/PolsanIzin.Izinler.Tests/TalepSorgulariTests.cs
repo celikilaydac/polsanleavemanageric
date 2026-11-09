@@ -99,6 +99,18 @@ public sealed class TalepSorgulariTests : IDisposable
     }
 
     [Fact]
+    public async Task Talepler_SiralamaBitiseDegilBaslangicaGore()
+    {
+        // Başlangıcı daha geç ama bitişi daha erken: yalnızca bitişe göre sıralama ters sonuç verir (verify 0004 S-1).
+        Talep(_calisan, T(11, 2), T(11, 30));
+        Talep(_calisan, T(11, 10), T(11, 11));
+
+        var talepler = await ServisAsync(s => s.TaleplerAsync(_calisan, Iptal));
+
+        Assert.Equal([T(11, 10), T(11, 2)], talepler.Select(t => t.Baslangic));
+    }
+
+    [Fact]
     public async Task Talepler_TumDurumlarDoner()
     {
         foreach (var (durum, i) in Enum.GetValues<TalepDurumu>().Select((d, i) => (d, i)))
