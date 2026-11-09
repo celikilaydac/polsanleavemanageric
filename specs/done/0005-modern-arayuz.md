@@ -1,6 +1,6 @@
 # Spec 0005 — Modern arayüz ve koyu mavi–mor–pembe palet (mini)
 
-- Status: In progress
+- Status: Shipped
 - Mode: lite
 - Plan: `specs/plans/0005-plan.md`
 - Source: kullanıcı talebi (sohbet, 2026-11-09): "ux / ui yapar mısın, modern kullanıcı arayüzü
@@ -15,26 +15,34 @@ koyu mavi–mor–pembe tonlarda, kart düzenli, sekmeli menüsü olan, okunabil
 koruyan bir görünüm. Davranış (akışlar, kurallar, metinler) değişmez; yalnızca görünüm değişir.
 
 ## Changed behavior
-- [ ] CB-1 — Tüm sayfalar koyu mavi–mor–pembe paleti kullanır; renkler yalnızca stil dosyasındaki
+- [x] CB-1 — Tüm sayfalar koyu mavi–mor–pembe paleti kullanır; renkler yalnızca stil dosyasındaki
   değişkenlerde tanımlıdır (başka yerde sabit renk yoktur).
-- [ ] CB-2 — Palet WCAG AA kontrastını sağlar: metin / zemin çiftleri ≥ 4.5:1; odak göstergesi ve
+- [x] CB-2 — Palet WCAG AA kontrastını sağlar: metin / zemin çiftleri ≥ 4.5:1; odak göstergesi ve
   form kenarı / zemin çiftleri ≥ 3:1 (testle hesaplanır).
-- [ ] CB-3 — Üst bar uygulama adını ve sekme (hap) görünümlü menüyü gösterir; açık sekme yalnızca
+- [x] CB-3 — Üst bar uygulama adını ve sekme (hap) görünümlü menüyü gösterir; açık sekme yalnızca
   renkle değil yazı kalınlığı ve alt çizgiyle de ayırt edilir.
-- [ ] CB-4 — Talep durumu (Taleplerim) rozet olarak gösterilir; rozetin metni durumun Türkçe adıdır
+- [x] CB-4 — Talep durumu (Taleplerim) rozet olarak gösterilir; rozetin metni durumun Türkçe adıdır
   (renk yalnızca ek ipucudur).
-- [ ] CB-5 — İçerik kartlarda gösterilir; giriş ekranı ortalanmış tek kart; dar ekranda (≤ 640px)
+- [x] CB-5 — İçerik kartlarda gösterilir; giriş ekranı ortalanmış tek kart; dar ekranda (≤ 640px)
   form tek sütuna iner, üst bar dikey yığılır (uygulama adı üstte, sekmeler altta ve satıra
   sığmazsa sarılır), sayfa yatay kaymaz (tablolar kendi kapsayıcısında kayar).
 
 ## Preserved behavior
-- [ ] PB-1 — Spec 0002, 0001 ve 0004'ün kabul kriterlerini kanıtlayan testlerin tamamı değişmeden
+- [x] PB-1 — Spec 0002, 0001 ve 0004'ün kabul kriterlerini kanıtlayan testlerin tamamı değişmeden
   yeşil kalır (metinler, kimlikler, akışlar aynı).
-- [ ] PB-2 — Her akış yalnızca klavyeyle yapılabilir; odak her etkileşimli öğede görünür.
-- [ ] PB-3 — Sayfalarda script yoktur; dış kaynak (font, CDN, görsel) yüklenmez; güvenlik
+- [x] PB-2 — Her akış yalnızca klavyeyle yapılabilir; odak her etkileşimli öğede görünür.
+- [x] PB-3 — Sayfalarda script yoktur; dış kaynak (font, CDN, görsel) yüklenmez; güvenlik
   başlıkları aynıdır.
-- [ ] PB-4 — Durum ve hata bilgisi yalnızca renkle iletilmez (metin her zaman vardır).
+- [x] PB-4 — Durum ve hata bilgisi yalnızca renkle iletilmez (metin her zaman vardır).
 
 ## Out of scope
 Açık / koyu tema seçici; ikon seti, logo, görsel varlıklar; animasyon kütüphaneleri; yeni sayfa,
 yeni bağlantı veya metin değişikliği; JavaScript.
+
+## Definition of Done
+- [x] `scripts/check` green — `CHECK GREEN (full, 4 steps, 142 s)` @ `389cbe7` (QA), 288 test
+- [x] Independent review done; real findings fixed, noise rejected with written rationale — iki review
+  turu (U-1…U-9, W-1…W-5) ve iki VERIFY turu; kalanlar plan 0005'te takip işi olarak kayıtlı
+- [x] Criterion ↔ evidence table complete for CB-* **and** PB-* (UI: before/after screenshots) —
+  QA 9/9 PASS; önce: spec 0002 / 0001 / 0004 PR ekleri, sonra: 1280 ve 375 px ekran görüntüleri (PR eki)
+- [x] Spec moved to `specs/done/` (immutable there)
