@@ -14,6 +14,7 @@ public static class CalisanlarModulu
             o.UseSqlite(baglantiDizesi, s => s.MigrationsHistoryTable(CalisanlarDbContext.GecmisTablosu)));
         services.AddSingleton<IPasswordHasher<Calisan>, PasswordHasher<Calisan>>();
         services.AddScoped<IKimlikDogrulamaServisi, KimlikDogrulamaServisi>();
+        services.AddScoped<ICalisanRehberi, CalisanRehberi>();
     }
 
     public static void SemaKur(IServiceProvider services, bool demoVeriYukle)

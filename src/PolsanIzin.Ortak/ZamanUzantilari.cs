@@ -11,7 +11,9 @@ public static class ZamanUzantilari
     public static DateOnly Bugun(this TimeProvider timeProvider)
     {
         ArgumentNullException.ThrowIfNull(timeProvider);
-        var istanbulZamani = TimeZoneInfo.ConvertTime(timeProvider.GetUtcNow(), _istanbul);
-        return DateOnly.FromDateTime(istanbulZamani.DateTime);
+        return DateOnly.FromDateTime(timeProvider.GetUtcNow().IstanbulZamani().DateTime);
     }
+
+    /// <summary>Bir anın Europe/Istanbul saatindeki karşılığı (ekranda gösterilen zaman, spec 0004 R-3).</summary>
+    public static DateTimeOffset IstanbulZamani(this DateTimeOffset an) => TimeZoneInfo.ConvertTime(an, _istanbul);
 }

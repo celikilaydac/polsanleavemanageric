@@ -1,6 +1,6 @@
 # Spec 0004 — Taleplerim ve Geçmiş sekmeleri
 
-- Status: Approved
+- Status: In progress
 - Mode: lite
 - Plan: `specs/plans/0004-plan.md`
 
