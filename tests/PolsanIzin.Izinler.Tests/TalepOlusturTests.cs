@@ -1,4 +1,5 @@
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Time.Testing;
 using PolsanIzin.Bakiyeler;
@@ -372,7 +373,7 @@ public sealed class TalepOlusturTests : IDisposable
             komut.ExecuteNonQuery();
         };
 
-        await Assert.ThrowsAnyAsync<Exception>(() => OlusturAsync(IzinTuru.Yillik, T(11, 2), T(11, 6)));
+        await Assert.ThrowsAsync<DbUpdateException>(() => OlusturAsync(IzinTuru.Yillik, T(11, 2), T(11, 6)));
 
         Assert.Single(_bakiye.GeriAlinanlar);
         Assert.Empty(_bakiye.Rezerveler);
@@ -394,6 +395,7 @@ public sealed class TalepOlusturTests : IDisposable
         var hata = await Assert.ThrowsAsync<AggregateException>(() => OlusturAsync(IzinTuru.Yillik, T(11, 2), T(11, 6)));
 
         Assert.Equal(2, hata.InnerExceptions.Count);
+        Assert.IsType<DbUpdateException>(hata.InnerExceptions[0]);
         Assert.Same(telafiHatasi, hata.InnerExceptions[1]);
         var talepId = Assert.Single(_bakiye.Rezerveler.Keys);
         Assert.Contains(talepId.ToString(), hata.Message, StringComparison.Ordinal);
