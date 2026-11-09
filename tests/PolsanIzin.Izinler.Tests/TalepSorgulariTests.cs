@@ -146,11 +146,11 @@ public sealed class TalepSorgulariTests : IDisposable
     [Fact]
     public async Task Gecmis_EklemeSirasindanBagimsiz_ZamanaGore()
     {
-        // Kimlikler (Guid v7) ekleme sırasıyla artar; zaman bunun tersi kurulur ki sıralama kimliğe
-        // değil zamana dayandığı kanıtlansın (review 0004 P-1).
+        // Yeni kayda küçük, eski kayda büyük kimlik verilir: kimliğe göre azalan sıralama zamanın tam
+        // tersini üretir, böylece sıralamanın zamana dayandığı her koşuda kanıtlanır (review 0004 P-1, Q-1).
         var talep = Talep(_calisan, T(11, 2), T(11, 2));
-        Denetim(talep, TimeSpan.FromHours(2), TalepDurumu.Beklemede, TalepDurumu.Onaylandi, _baskasi);
-        Denetim(talep, TimeSpan.Zero, null, TalepDurumu.Beklemede, _calisan);
+        Denetim(talep, TimeSpan.FromHours(2), TalepDurumu.Beklemede, TalepDurumu.Onaylandi, _baskasi, new Guid("00000000-0000-7000-8000-000000000001"));
+        Denetim(talep, TimeSpan.Zero, null, TalepDurumu.Beklemede, _calisan, new Guid("00000000-0000-7000-8000-000000000002"));
 
         var gecmis = await ServisAsync(s => s.GecmisAsync(_calisan, Iptal));
 
