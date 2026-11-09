@@ -55,8 +55,16 @@ internal sealed class SahteBakiye : IBakiyeServisi
         return Sonuc.Basari();
     }
 
+    /// <summary>Doluysa geri alma bu hatayla başarısız olur (telafi hatası testi).</summary>
+    public Exception? GeriAlHatasi { get; set; }
+
     public Task<Sonuc> RezerveGeriAlAsync(Guid talepId, CancellationToken iptal = default)
     {
+        if (GeriAlHatasi is not null)
+        {
+            throw GeriAlHatasi;
+        }
+
         GeriAlinanlar.Add(talepId);
         Rezerveler.Remove(talepId);
         return Task.FromResult(Sonuc.Basari());

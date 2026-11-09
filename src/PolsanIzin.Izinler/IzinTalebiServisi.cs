@@ -91,12 +91,19 @@ internal sealed class IzinTalebiServisi(
         {
             await db.SaveChangesAsync(iptal);
         }
-        catch
+        catch (Exception asil) when (tur == IzinTuru.Yillik)
         {
-            // ADR 0004 telafi: talep yazılamadıysa rezerve geri alınır; hata yine de fırlatılır.
-            if (tur == IzinTuru.Yillik)
+            // ADR 0004 telafi: talep yazılamadıysa rezerve geri alınır; asıl hata yine de fırlatılır.
+            // Telafi de başarısızsa ikisi birlikte, talep kimliğiyle yüzeye çıkar (yetim rezerve izi,
+            // review 0001 K-5); global hata işleyicisi loglar.
+            try
             {
                 await bakiye.RezerveGeriAlAsync(talepId, CancellationToken.None);
+            }
+            catch (Exception telafi)
+            {
+                throw new AggregateException(
+                    $"Talep {talepId} yazılamadı ve rezervesi geri alınamadı (yetim rezerve).", asil, telafi);
             }
 
             throw;

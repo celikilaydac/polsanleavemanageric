@@ -379,6 +379,26 @@ public sealed class TalepOlusturTests : IDisposable
     }
 
     [Fact]
+    public async Task TalepOlustur_YazimVeTelafiHatasi_IkiHataBirlikteVeTalepKimligi()
+    {
+        _bakiye.RezerveSonrasi = () =>
+        {
+            using var komut = _canliTut.CreateCommand();
+            komut.CommandText = "DROP TABLE DenetimKayitlari";
+            komut.ExecuteNonQuery();
+        };
+        var telafiHatasi = new InvalidOperationException("telafi başarısız");
+        _bakiye.GeriAlHatasi = telafiHatasi;
+
+        var hata = await Assert.ThrowsAsync<AggregateException>(() => OlusturAsync(IzinTuru.Yillik, T(11, 2), T(11, 6)));
+
+        Assert.Equal(2, hata.InnerExceptions.Count);
+        Assert.Same(telafiHatasi, hata.InnerExceptions[1]);
+        var talepId = Assert.Single(_bakiye.Rezerveler.Keys);
+        Assert.Contains(talepId.ToString(), hata.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public async Task TalepOlustur_EsZamanliIkiYillik_EnFazlaBiriKabul()
     {
         // Her biri tek başına sığar (10 iş günü ≤ 14), ikisi birlikte sığmaz.
