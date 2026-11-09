@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PolsanIzin.Bakiyeler;
@@ -75,7 +74,7 @@ public sealed class OlusturModel(
         return Page();
     }
 
-    private Guid OturumdakiCalisan() => Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    private Guid OturumdakiCalisan() => User.OturumdakiCalisanId();
 
     private async Task BakiyeYukleAsync(CancellationToken iptal)
     {

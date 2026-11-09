@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PolsanIzin.Calisanlar;
 using PolsanIzin.Izinler;
@@ -18,7 +17,7 @@ public sealed class GecmisModel(IIzinTalebiServisi talepServisi, ICalisanRehberi
     public async Task OnGetAsync(CancellationToken iptal)
     {
         // Kimlik yalnızca oturumdan alınır; adres parametresi bağlanmaz (spec 0004 R-1, AC-12).
-        var ben = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var ben = User.OturumdakiCalisanId();
         var kayitlar = await talepServisi.GecmisAsync(ben, iptal);
         var adlar = await calisanRehberi.AdSoyadlarAsync(
             kayitlar.Select(k => k.YapanCalisanId).Where(id => id != ben), iptal);

@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PolsanIzin.Izinler;
 
@@ -11,5 +10,5 @@ public sealed class TaleplerimModel(IIzinTalebiServisi talepServisi) : PageModel
 
     // Kimlik yalnızca oturumdan alınır; adres parametresi bağlanmaz (spec 0004 R-1, AC-6).
     public async Task OnGetAsync(CancellationToken iptal) =>
-        Talepler = await talepServisi.TaleplerAsync(Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!), iptal);
+        Talepler = await talepServisi.TaleplerAsync(User.OturumdakiCalisanId(), iptal);
 }
