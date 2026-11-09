@@ -12,7 +12,7 @@ Razor Pages, EF Core + SQLite ([ADR 0002](decisions/0002-teknoloji-yigini.md)).
 ```
 PolsanIzin.slnx
 src/
-  PolsanIzin.Ortak/         class library — paylaşılan çekirdek (Sonuc, Hata, Bugun())
+  PolsanIzin.Ortak/         class library — paylaşılan çekirdek (Sonuc, Hata, Bugun(), IstanbulZamani())
   PolsanIzin.Calisanlar/    class library
   PolsanIzin.Takvim/        class library
   PolsanIzin.Bakiyeler/     class library
@@ -33,7 +33,7 @@ tests/
 | `Bakiyeler` | İzin hakkı ve bakiye; rezerve / kesinleştir / serbest bırak (BR-2, BR-9, BR-10, BR-11, BR-15); bakiye asla negatif olmaz | İzin hakkı, bakiye hareketleri |
 | `Izinler` | İzin talebinin yaşam döngüsü: oluştur, onayla, reddet, iptal (BR-2…BR-9, BR-11, BR-13, BR-14); denetim izi | İzin talebi, durum geçmişi |
 | `Web` | Razor Pages ekranları, kimlik doğrulama (cookie), yetki policy'leri; **iş kuralı içermez** | (veri sahibi değil) |
-| `Ortak` | Paylaşılan çekirdek: `Sonuc` / `Sonuc<T>` / `Hata`, `TimeProvider.Bugun()` (BR-12). Domain değil, altyapı tipidir | (veri sahibi değil) |
+| `Ortak` | Paylaşılan çekirdek: `Sonuc` / `Sonuc<T>` / `Hata`, `TimeProvider.Bugun()` (BR-12), `IstanbulZamani()`. Domain değil, altyapı tipidir | (veri sahibi değil) |
 
 ## Communication rules
 1. Modüller arası iletişim **yalnızca public arayüz** üzerinden (ör. `IBakiyeServisi`), senkron

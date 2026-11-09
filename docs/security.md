@@ -28,7 +28,8 @@
 - Çıktı Razor tarafından encode edilir. `Html.Raw` yalnızca gerekçeli istisnadır ve review'da
   sorgulanır.
 - Ham SQL yoktur: `FromSqlRaw` / `ExecuteSqlRaw` ve string birleştirmeyle sorgu yasaktır; EF LINQ
-  veya parametreli sorgu kullanılır.
+  veya parametreli sorgu kullanılır. İstisna: test projelerindeki veri kurulum yardımcıları
+  (ör. `PolsanIzinFactory.Calistir`); üretim kodunda hiçbir zaman.
 - Hata yanıtlarında stack trace, SQL, iç tip adı yoktur; developer exception page yalnızca
   `Development` ortamında açıktır. `Development` dışında HTTPS yönlendirme ve HSTS açıktır.
 - Her yanıtta güvenlik başlıkları: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`

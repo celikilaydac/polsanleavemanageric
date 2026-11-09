@@ -53,6 +53,8 @@
   `DateTime.UtcNow`, `DateTimeOffset.Now` doğrudan kullanılmaz.
 - "Bugün" yalnızca `Ortak`'taki `timeProvider.Bugun()` uzantısıyla alınır (Europe/Istanbul,
   BR-12); `DateOnly.FromDateTime(...)` ile elle dönüşüm yazılmaz.
+- Ekranda gösterilen an (ör. denetim izi zamanı) `Ortak`'taki `IstanbulZamani()` ile Europe/Istanbul
+  saatine çevrilir; saat dilimi dönüşümü başka yerde yazılmaz.
 - Gün sayıları `int`'tir (BR-11: yarım gün yok).
 - Kimlikler `Guid`, `Guid.CreateVersion7()` ile üretilir.
 - Enum'lar veritabanında string olarak saklanır.
