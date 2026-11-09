@@ -48,7 +48,7 @@ public sealed partial class ArayuzTests : IDisposable
         var anonim = await SayfaAsync(_factory.Istemci(), "/Giris");
         var istemci = await GirisYapmisIstemciAsync();
         List<IHtmlDocument> belgeler = [anonim];
-        foreach (var adres in new[] { "/", "/Izinler/Olustur", "/Izinler/Taleplerim", "/Izinler/Gecmis" })
+        foreach (var adres in new[] { "/", "/Izinler/Olustur", "/Izinler/Taleplerim", "/Izinler/Gecmis", "/Hata" })
         {
             belgeler.Add(await SayfaAsync(istemci, adres));
         }
