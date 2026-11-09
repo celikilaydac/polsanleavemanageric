@@ -1,0 +1,41 @@
+@page
+@model TaleplerimModel
+@{
+    ViewData["Baslik"] = "Taleplerim";
+}
+
+<h1>Taleplerim</h1>
+
+@if (Model.Talepler.Count == 0)
+{
+    <p id="bos">Henüz izin talebiniz yok.</p>
+}
+else
+{
+    <table id="talepler">
+        <caption>İzin taleplerim (başlangıç tarihi yeniden eskiye)</caption>
+        <thead>
+            <tr>
+                <th scope="col">İzin türü</th>
+                <th scope="col">Başlangıç</th>
+                <th scope="col">Bitiş</th>
+                <th scope="col">İş günü</th>
+                <th scope="col">Durum</th>
+                <th scope="col">Açıklama</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var talep in Model.Talepler)
+            {
+                <tr>
+                    <td>@IzinMetinleri.TurAdi(talep.IzinTuru)</td>
+                    <td>@IzinMetinleri.Tarih(talep.Baslangic)</td>
+                    <td>@IzinMetinleri.Tarih(talep.Bitis)</td>
+                    <td>@talep.IsGunu</td>
+                    <td>@IzinMetinleri.DurumAdi(talep.Durum)</td>
+                    <td>@(string.IsNullOrWhiteSpace(talep.Aciklama) ? "—" : talep.Aciklama)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

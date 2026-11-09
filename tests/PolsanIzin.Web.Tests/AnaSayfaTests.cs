@@ -32,7 +32,7 @@ public sealed class AnaSayfaTests : IDisposable
         var menu = belge.QuerySelector("nav");
 
         Assert.NotNull(menu);
-        Assert.Equal(["/", "/Izinler/Olustur"], menu.QuerySelectorAll("a").Select(a => a.GetAttribute("href")));
+        Assert.Equal(["/", "/Izinler/Olustur", "/Izinler/Taleplerim", "/Izinler/Gecmis"], menu.QuerySelectorAll("a").Select(a => a.GetAttribute("href")));
         var cikis = Assert.Single(menu.QuerySelectorAll("form"));
         Assert.Equal("/Cikis", cikis.GetAttribute("action"));
         Assert.Equal("Çıkış", cikis.QuerySelector("button")?.TextContent.Trim());

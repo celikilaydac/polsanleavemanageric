@@ -95,3 +95,33 @@ button:focus-visible {
 .basari dd {
     margin: 0;
 }
+
+/* Spec 0004: açık sekme (aria-current) ve listeler. */
+nav a[aria-current="page"] {
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+}
+
+main:has(table) {
+    max-width: 60rem;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+caption {
+    text-align: left;
+    font-weight: 600;
+    padding-bottom: 0.5rem;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid #d0d7de;
+    vertical-align: top;
+}

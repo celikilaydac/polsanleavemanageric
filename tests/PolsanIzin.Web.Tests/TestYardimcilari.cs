@@ -1,6 +1,9 @@
 using System.Net;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
+using Microsoft.Extensions.DependencyInjection;
+using PolsanIzin.Calisanlar;
+using PolsanIzin.Izinler;
 
 namespace PolsanIzin.Web.Tests;
 
@@ -75,4 +78,22 @@ internal static class TestYardimcilari
         yanit.Headers.TryGetValues("Set-Cookie", out var cerezler)
         && cerezler.Any(c => c.StartsWith(OturumCerezi + "=", StringComparison.Ordinal)
                              && !c.Contains("expires=Thu, 01 Jan 1970", StringComparison.OrdinalIgnoreCase));
+
+    public static async Task<Guid> CalisanIdAsync(this PolsanIzinFactory factory, string eposta)
+    {
+        using var kapsam = factory.Services.CreateScope();
+        var sonuc = await kapsam.ServiceProvider.GetRequiredService<IKimlikDogrulamaServisi>()
+            .DogrulaAsync(eposta, DemoKullanicilar.Parola, TestContext.Current.CancellationToken);
+        return sonuc.Deger.CalisanId;
+    }
+
+    /// <summary>Public servis üzerinden geçerli bir talep oluşturur (test verisi).</summary>
+    public static async Task TalepAsync(
+        this PolsanIzinFactory factory, Guid calisan, IzinTuru tur, DateOnly baslangic, DateOnly bitis, string? aciklama = null)
+    {
+        using var kapsam = factory.Services.CreateScope();
+        var sonuc = await kapsam.ServiceProvider.GetRequiredService<IIzinTalebiServisi>().TalepOlusturAsync(
+            new TalepOlusturKomutu(calisan, tur, baslangic, bitis, aciklama), TestContext.Current.CancellationToken);
+        Assert.True(sonuc.Basarili, string.Join("; ", sonuc.Hatalar.Select(h => h.Mesaj)));
+    }
 }

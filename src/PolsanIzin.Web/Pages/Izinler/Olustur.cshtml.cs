@@ -21,11 +21,7 @@ public sealed class OlusturModel(
     public const string TarihBicimi = "yyyy-MM-dd";
 
     public static readonly IReadOnlyList<(Tur Deger, string Ad)> Turler =
-    [
-        (Tur.Yillik, "Yıllık"),
-        (Tur.Mazeret, "Mazeret"),
-        (Tur.Ucretsiz, "Ücretsiz"),
-    ];
+        [.. new[] { Tur.Yillik, Tur.Mazeret, Tur.Ucretsiz }.Select(t => (t, IzinMetinleri.TurAdi(t)))];
 
     // Formda kimlik alanı yoktur: talep her zaman oturumdaki çalışan adına açılır (R-1, AC-27).
     [BindProperty]
@@ -51,10 +47,6 @@ public sealed class OlusturModel(
 
     /// <summary>Gönderim reddedildi: form üstünde duyurulur (yalnızca alan hatası olsa da).</summary>
     public bool TalepAlinmadi { get; private set; }
-
-    public static string TurAdi(Tur tur) => Turler.First(t => t.Deger == tur).Ad;
-
-    public static string TarihMetni(DateOnly tarih) => tarih.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture);
 
     public async Task OnGetAsync(CancellationToken iptal) => await BakiyeYukleAsync(iptal);
 

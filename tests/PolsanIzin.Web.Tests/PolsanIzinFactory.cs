@@ -79,6 +79,17 @@ public class PolsanIzinFactory : WebApplicationFactory<Program>
         return (long)komut.ExecuteScalar()!;
     }
 
+    /// <summary>
+    /// Test verisi kurmak için ham SQL (ör. henüz public API'si olmayan onay / ret durumları, plan 0004
+    /// Risk 2). Üretim koduna test kapısı eklenmez.
+    /// </summary>
+    public int Calistir(string sql)
+    {
+        using var komut = _canliTut.CreateCommand();
+        komut.CommandText = sql;
+        return komut.ExecuteNonQuery();
+    }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment(Ortam);

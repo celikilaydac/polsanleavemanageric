@@ -1,3 +1,8 @@
+@{
+    // Açık sekme menüde programatik olarak işaretlenir (spec 0004 AC-1); null öznitelik hiç yazılmaz.
+    string? AcikSekme(string sayfa) =>
+        string.Equals(ViewContext.RouteData.Values["page"] as string, sayfa, StringComparison.Ordinal) ? "page" : null;
+}
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -14,8 +19,10 @@
             @* Menüde yalnızca var olan sayfalar bulunur; diğer öğeleri kendi spec'leri ekler (spec 0002 R-13). *@
             <nav aria-label="Ana menü">
                 <ul>
-                    <li><a asp-page="/Index">Ana Sayfa</a></li>
-                    <li><a asp-page="/Izinler/Olustur">İzin Talebi Oluştur</a></li>
+                    <li><a asp-page="/Index" aria-current="@AcikSekme("/Index")">Ana Sayfa</a></li>
+                    <li><a asp-page="/Izinler/Olustur" aria-current="@AcikSekme("/Izinler/Olustur")">İzin Talebi Oluştur</a></li>
+                    <li><a asp-page="/Izinler/Taleplerim" aria-current="@AcikSekme("/Izinler/Taleplerim")">Taleplerim</a></li>
+                    <li><a asp-page="/Izinler/Gecmis" aria-current="@AcikSekme("/Izinler/Gecmis")">Geçmiş</a></li>
                     <li>
                         <form method="post" asp-page="/Cikis">
                             <button type="submit">Çıkış</button>
