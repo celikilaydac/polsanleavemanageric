@@ -1,6 +1,6 @@
 # Spec 0001 — İzin talebi giriş ekranı
 
-- Status: In progress
+- Status: Shipped
 - Mode: lite
 - Plan: `specs/plans/0001-plan.md`
 
@@ -93,83 +93,83 @@ spec'tir (CLARIFY S2) ve bu spec'in **önkoşuludur**.
 tatildir; çalışanın 2026 hakkı 14 gün, kesinleşen kullanım 0, rezerve 0'dır (aksi belirtilmedikçe).
 
 **Happy path**
-- [ ] AC-1 — `Yillik`, 2026-11-02 (Pzt) – 2026-11-06 (Cum): talep `Beklemede` kaydedilir; başarı
+- [x] AC-1 — `Yillik`, 2026-11-02 (Pzt) – 2026-11-06 (Cum): talep `Beklemede` kaydedilir; başarı
   özeti 5 iş günü ve "Beklemede" gösterir; ekrandaki bakiye 14 → 9 olur.
-- [ ] AC-2 — `Mazeret` ve `Ucretsiz` talepleri (geçerli aralık) `Beklemede` kaydedilir; bakiye
+- [x] AC-2 — `Mazeret` ve `Ucretsiz` talepleri (geçerli aralık) `Beklemede` kaydedilir; bakiye
   değişmez.
-- [ ] AC-3 — Açıklama boş bırakılan geçerli talep kabul edilir; 500 karakterlik açıklama kabul
+- [x] AC-3 — Açıklama boş bırakılan geçerli talep kabul edilir; 500 karakterlik açıklama kabul
   edilir.
-- [ ] AC-4 — Talep oluşturulunca denetim izine oluşturan kişi ve UTC zaman damgası yazılır.
+- [x] AC-4 — Talep oluşturulunca denetim izine oluşturan kişi ve UTC zaman damgası yazılır.
 
 **İş günü hesabı (BR-1, BR-11)**
-- [ ] AC-5 — 2026-10-30 (Cum) – 2026-11-02 (Pzt): 2 iş günü hesaplanır (hafta sonu sayılmaz).
-- [ ] AC-6 — 2026-10-28 (Çar) – 2026-10-30 (Cum): 2 iş günü hesaplanır (29 Ekim resmi tatil).
+- [x] AC-5 — 2026-10-30 (Cum) – 2026-11-02 (Pzt): 2 iş günü hesaplanır (hafta sonu sayılmaz).
+- [x] AC-6 — 2026-10-28 (Çar) – 2026-10-30 (Cum): 2 iş günü hesaplanır (29 Ekim resmi tatil).
 
 **Sınırlar ve geçersiz girdiler**
-- [ ] AC-7 — Başlangıç = bitiş = bir iş günü: 1 iş günü, kabul edilir.
-- [ ] AC-8 — Bitiş başlangıçtan önce: reddedilir, bitiş alanında mesaj.
-- [ ] AC-9 — Yalnızca hafta sonu / resmi tatil içeren aralık (ör. 2026-10-31 – 2026-11-01 veya
+- [x] AC-7 — Başlangıç = bitiş = bir iş günü: 1 iş günü, kabul edilir.
+- [x] AC-8 — Bitiş başlangıçtan önce: reddedilir, bitiş alanında mesaj.
+- [x] AC-9 — Yalnızca hafta sonu / resmi tatil içeren aralık (ör. 2026-10-31 – 2026-11-01 veya
   yalnızca 2026-10-29): 0 iş günü, reddedilir.
-- [ ] AC-10 — Başlangıç = bugün (2026-10-21) kabul edilir; başlangıç = dün (2026-10-20)
+- [x] AC-10 — Başlangıç = bugün (2026-10-21) kabul edilir; başlangıç = dün (2026-10-20)
   reddedilir.
-- [ ] AC-11 — "Bugün" Istanbul'a göredir: UTC 2026-10-21 21:30 (= Istanbul 2026-10-22 00:30)
+- [x] AC-11 — "Bugün" Istanbul'a göredir: UTC 2026-10-21 21:30 (= Istanbul 2026-10-22 00:30)
   anında başlangıç 2026-10-21 reddedilir, 2026-10-22 kabul edilir.
-- [ ] AC-12 — 2026-12-31 – 2027-01-04 (yıl aşan aralık): reddedilir, "iki ayrı talep açın"
+- [x] AC-12 — 2026-12-31 – 2027-01-04 (yıl aşan aralık): reddedilir, "iki ayrı talep açın"
   anlamında mesaj.
-- [ ] AC-13 — Zorunlu alanlardan biri veya hepsi boş: gönderim reddedilir, her boş alan için
+- [x] AC-13 — Zorunlu alanlardan biri veya hepsi boş: gönderim reddedilir, her boş alan için
   ayrı mesaj gösterilir.
-- [ ] AC-14 — 501 karakterlik açıklama reddedilir.
-- [ ] AC-15 — Geçersiz tarih değeri veya listede olmayan izin türü doğrudan gönderilirse
+- [x] AC-14 — 501 karakterlik açıklama reddedilir.
+- [x] AC-15 — Geçersiz tarih değeri veya listede olmayan izin türü doğrudan gönderilirse
   reddedilir.
 
 **Çakışma (BR-3)**
-- [ ] AC-16 — 2026-11-02 – 11-06 `Beklemede` talep varken 2026-11-05 – 11-10 talebi reddedilir;
+- [x] AC-16 — 2026-11-02 – 11-06 `Beklemede` talep varken 2026-11-05 – 11-10 talebi reddedilir;
   aynısı `Onaylandi` talep için de geçerlidir.
-- [ ] AC-17 — Aynı aralık `Reddedildi` veya `IptalEdildi` talepte ise yeni talep kabul edilir.
-- [ ] AC-18 — Bitişik aralık (mevcut 11-02 – 11-06, yeni 11-09 – 11-13) kabul edilir.
-- [ ] AC-19 — Aynı formun iki kez gönderilmesi ikinci talebi oluşturmaz (çakışma ile reddedilir).
+- [x] AC-17 — Aynı aralık `Reddedildi` veya `IptalEdildi` talepte ise yeni talep kabul edilir.
+- [x] AC-18 — Bitişik aralık (mevcut 11-02 – 11-06, yeni 11-09 – 11-13) kabul edilir.
+- [x] AC-19 — Aynı formun iki kez gönderilmesi ikinci talebi oluşturmaz (çakışma ile reddedilir).
 
 **Bakiye (BR-2, BR-9 rezerve)**
-- [ ] AC-20 — Bakiye 14 iken 14 iş günlük `Yillik` talep kabul edilir; 15 iş günlük reddedilir.
-- [ ] AC-21 — 2026'da 5 gün rezerve (`Beklemede` talep) varken 10 iş günlük `Yillik` talep
+- [x] AC-20 — Bakiye 14 iken 14 iş günlük `Yillik` talep kabul edilir; 15 iş günlük reddedilir.
+- [x] AC-21 — 2026'da 5 gün rezerve (`Beklemede` talep) varken 10 iş günlük `Yillik` talep
   reddedilir, 9 iş günlük kabul edilir.
-- [ ] AC-22 — İzin hakkı tanımlı olmayan yıl (ör. 2027) için `Yillik` talep "Bu yıl için izin
+- [x] AC-22 — İzin hakkı tanımlı olmayan yıl (ör. 2027) için `Yillik` talep "Bu yıl için izin
   hakkınız tanımlı değil" mesajıyla reddedilir; aynı yıl için `Mazeret` talep kabul edilir.
-- [ ] AC-23 — Kalan bakiyeyi tek başına karşılayabilen iki `Yillik` talep aynı anda
+- [x] AC-23 — Kalan bakiyeyi tek başına karşılayabilen iki `Yillik` talep aynı anda
   gönderildiğinde en fazla bakiyenin izin verdiği kadarı kabul edilir; bakiye negatife düşmez.
 
 **Hata davranışı**
-- [ ] AC-24 — Birden fazla ihlal içeren gönderimde (ör. geçmiş başlangıç + 501 karakter
+- [x] AC-24 — Birden fazla ihlal içeren gönderimde (ör. geçmiş başlangıç + 501 karakter
   açıklama) tüm mesajlar aynı anda gösterilir ve girilen değerler korunur.
-- [ ] AC-25 — Reddedilen her gönderimden sonra talep sayısı, rezerve ve denetim izi değişmemiştir.
+- [x] AC-25 — Reddedilen her gönderimden sonra talep sayısı, rezerve ve denetim izi değişmemiştir.
 
 **Yetki**
-- [ ] AC-26 — Oturumu olmayan kullanıcı ekranı açmak veya form göndermek istediğinde oturum
+- [x] AC-26 — Oturumu olmayan kullanıcı ekranı açmak veya form göndermek istediğinde oturum
   açma ekranına yönlendirilir; talep oluşmaz.
-- [ ] AC-27 — Gönderime başka bir çalışanın kimliği eklense bile talep yalnızca oturumdaki
+- [x] AC-27 — Gönderime başka bir çalışanın kimliği eklense bile talep yalnızca oturumdaki
   çalışan adına oluşur.
-- [ ] AC-28 — Yönetici ve İK rolündeki çalışanlar da kendi adlarına talep oluşturabilir.
+- [x] AC-28 — Yönetici ve İK rolündeki çalışanlar da kendi adlarına talep oluşturabilir.
 
 **Ekran durumları ve erişilebilirlik**
-- [ ] AC-29 — İlk açılışta alanlar boştur, izin türü seçili değildir ve 2026 bakiyesi (14 gün)
+- [x] AC-29 — İlk açılışta alanlar boştur, izin türü seçili değildir ve 2026 bakiyesi (14 gün)
   görünür; hak tanımlı değilse R-3 bilgi metni görünür.
-- [ ] AC-30 — Başarı sonrası özet (tür, başlangıç, bitiş, iş günü, "Beklemede") görünür ve form
+- [x] AC-30 — Başarı sonrası özet (tür, başlangıç, bitiş, iş günü, "Beklemede") görünür ve form
   boştur.
-- [ ] AC-31 — Her form alanının görünür etiketi vardır, hata mesajları ilgili alana bağlıdır
+- [x] AC-31 — Her form alanının görünür etiketi vardır, hata mesajları ilgili alana bağlıdır
   ve form yalnızca klavyeyle doldurulup gönderilebilir.
 
 ## Definition of Done
-- [ ] Every acceptance criterion mapped to proof (test or reproducible observation)
-- [ ] `scripts/check` green
-- [ ] Independent review done; real findings fixed, noise rejected with written rationale
-- [ ] Docs / ADRs updated if behavior or architecture changed
-- [ ] Spec moved to `specs/done/` (it becomes immutable there)
+- [x] Every acceptance criterion mapped to proof (test or reproducible observation)
+- [x] `scripts/check` green
+- [x] Independent review done; real findings fixed, noise rejected with written rationale
+- [x] Docs / ADRs updated if behavior or architecture changed
+- [x] Spec moved to `specs/done/` (it becomes immutable there)
 
 ## Scorecard (fill at ship — honest numbers make the process improvable)
 | Metric | Value |
 |---|---|
-| Spec revisions | |
-| Fix rounds | |
-| Review findings: real / noise | |
-| Regressions introduced | |
-| Bugs escaped to production | |
+| Spec revisions | 0 (onaydan sonra yalnızca Status değişti) |
+| Fix rounds | 3 (review K, re-review L, VERIFY N; son re-review M temiz) |
+| Review findings: real / noise | 11 real / 1 noise (K-1…K-7, L-1, L-3, N-1, N-2 real; L-2 noise). VERIFY: 31/31 PASS, 20 mutasyonun 19'u yakalandı |
+| Regressions introduced | 0 |
+| Bugs escaped to production | 0 (henüz dağıtım yok) |
