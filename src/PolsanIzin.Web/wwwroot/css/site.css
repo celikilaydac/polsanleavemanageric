@@ -1,48 +1,202 @@
+/*
+ * PolsanIzin — koyu mavi–mor–pembe arayüz (spec 0005).
+ * Renkler YALNIZCA :root değişkenlerinde tanımlıdır (CB-1); kontrast oranları PaletTests ile
+ * hesaplanır (CB-2: metin ≥ 4.5:1, odak / kenar ≥ 3:1). Dış kaynak (font, görsel) yoktur (PB-3).
+ */
 :root {
-    --metin: #1f2328;
-    --zemin: #ffffff;
-    --vurgu: #0b5cad;
-    --hata: #b42318;
+    color-scheme: dark;
+
+    /* Zeminler */
+    --zemin: #0d0e24;
+    --yuzey: #17183a;
+    --yuzey-2: #212350;
+    --cizgi: #2c2e5e;
+    --kenar: #7a7fd0;
+
+    /* Metin */
+    --metin: #eef0ff;
+    --metin-soluk: #b4b8e6;
+    --dugme-metin: #0d0e24;
+
+    /* Palet */
+    --mavi: #6f9bff;
+    --mor: #a78bff;
+    --pembe: #ff7ac3;
+
+    /* Durum */
+    --hata: #ff8fab;
+    --basari: #5ee0a8;
+    --uyari: #ffd166;
+    --notr: #b4b8e6;
+
+    /* Türetilmiş */
+    --odak: var(--pembe);
+    --degrade: linear-gradient(100deg, var(--mavi), var(--mor) 55%, var(--pembe));
+    --isik-mor: rgb(167 139 255 / 0.18);
+    --isik-pembe: rgb(255 122 195 / 0.12);
+    --ust-bar: rgb(13 14 36 / 0.82);
+    --hata-zemin: rgb(255 143 171 / 0.1);
+    --basari-zemin: rgb(94 224 168 / 0.1);
+    --golge: 0 18px 40px rgb(0 0 0 / 0.35);
+
+    --yaricap: 16px;
+    --yaricap-kucuk: 10px;
+    --gecis: 150ms ease;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    font-family: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.55;
     color: var(--metin);
-    background: var(--zemin);
-    line-height: 1.5;
+    background:
+        radial-gradient(circle at 8% -10%, var(--isik-mor), transparent 42%),
+        radial-gradient(circle at 100% 0%, var(--isik-pembe), transparent 38%),
+        var(--zemin);
+    background-attachment: fixed;
 }
 
+h1 {
+    margin: 0 0 1.25rem;
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+
+a {
+    color: var(--mavi);
+}
+
+a:hover {
+    color: var(--pembe);
+}
+
+/* Üst bar ve sekmeler (CB-3) */
 header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem 1.5rem;
-    border-bottom: 1px solid #d0d7de;
+    gap: 1rem;
+    padding: 0.85rem clamp(1rem, 4vw, 2.5rem);
+    background: var(--ust-bar);
+    border-bottom: 1px solid var(--cizgi);
+    backdrop-filter: blur(10px);
+}
+
+.uygulama-adi {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: var(--degrade);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
 }
 
 nav ul {
     display: flex;
-    gap: 1rem;
+    flex-wrap: wrap;
+    gap: 0.4rem;
     align-items: center;
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
+nav a {
+    display: inline-block;
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    color: var(--metin-soluk);
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color var(--gecis), color var(--gecis);
+}
+
+nav a:hover {
+    color: var(--metin);
+    background: var(--yuzey-2);
+}
+
+/* Açık sekme: renk + kalınlık + alt çizgi; yalnızca renkle ayırt edilmez. */
+nav a[aria-current="page"] {
+    color: var(--dugme-metin);
+    background: var(--degrade);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+}
+
 nav form {
     margin: 0;
 }
 
+/* İçerik ve kartlar (CB-5) */
 main {
-    max-width: 40rem;
-    padding: 1.5rem;
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: clamp(1.25rem, 4vw, 2.5rem) clamp(1rem, 4vw, 2.5rem) 3rem;
+}
+
+.kart {
+    background: var(--yuzey);
+    border: 1px solid var(--cizgi);
+    border-radius: var(--yaricap);
+    box-shadow: var(--golge);
+    padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.kart + .kart {
+    margin-top: 1.25rem;
+}
+
+.giris-kart {
+    max-width: 26rem;
+    margin: clamp(1rem, 6vh, 4rem) auto 0;
+}
+
+.aciklama-metni {
+    margin-top: 0;
+    color: var(--metin-soluk);
+}
+
+/* Form */
+form {
+    margin: 0;
 }
 
 .alan {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
+    gap: 0.35rem;
+    margin-bottom: 1.1rem;
+}
+
+.alan label {
+    color: var(--metin-soluk);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.form-izgara {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1rem;
+}
+
+.form-izgara .genis {
+    grid-column: 1 / -1;
 }
 
 input,
@@ -50,39 +204,117 @@ select,
 textarea,
 button {
     font: inherit;
-    padding: 0.4rem 0.6rem;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    color: var(--metin);
+    background: var(--yuzey-2);
+    border: 1px solid var(--kenar);
+    border-radius: var(--yaricap-kucuk);
+    transition: border-color var(--gecis);
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+    border-color: var(--mor);
+}
+
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+    border-color: var(--hata);
+    border-width: 2px;
+}
+
+textarea {
+    resize: vertical;
 }
 
 button {
     cursor: pointer;
+    padding: 0.65rem 1.3rem;
+    color: var(--dugme-metin);
+    background: var(--degrade);
+    border: 0;
+    border-radius: 999px;
+    font-weight: 700;
+    transition: filter var(--gecis), transform var(--gecis);
 }
 
-/* Klavye kullanıcıları için görünür odak (spec 0002 AC-26). */
+button:hover {
+    filter: brightness(1.08);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Menüdeki Çıkış: ikincil düğme */
+nav button {
+    padding: 0.45rem 0.95rem;
+    color: var(--metin);
+    background: transparent;
+    border: 1px solid var(--kenar);
+    font-weight: 600;
+}
+
+nav button:hover {
+    filter: none;
+    background: var(--yuzey-2);
+}
+
+/* Klavye kullanıcıları için görünür odak (spec 0002 AC-26, 0001 AC-31, 0005 PB-2). */
 a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 button:focus-visible {
-    outline: 3px solid var(--vurgu);
+    outline: 3px solid var(--odak);
     outline-offset: 2px;
 }
 
-.alan-hatasi,
-.hata-ozeti {
+/* Mesajlar: renk yalnızca ek ipucu, metin her zaman var (PB-4). */
+.alan-hatasi {
     color: var(--hata);
+    font-size: 0.92rem;
+}
+
+.alan-hatasi:empty {
+    display: none;
 }
 
 .hata-ozeti {
+    margin-bottom: 1.25rem;
+    padding: 0.85rem 1rem;
+    color: var(--metin);
+    background: var(--hata-zemin);
     border: 1px solid var(--hata);
-    padding: 0.5rem 0.75rem;
-    margin-bottom: 1rem;
+    border-left-width: 5px;
+    border-radius: var(--yaricap-kucuk);
 }
 
-/* Spec 0001: başarı özeti; durum yalnızca renkle değil metinle de iletilir. */
+.hata-ozeti p,
+.hata-ozeti ul {
+    margin: 0.2rem 0;
+}
+
 .basari {
-    border: 1px solid #1a7f37;
-    padding: 0.5rem 0.75rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    padding: 0.85rem 1rem;
+    background: var(--basari-zemin);
+    border: 1px solid var(--basari);
+    border-left-width: 5px;
+    border-radius: var(--yaricap-kucuk);
+}
+
+.basari p {
+    margin: 0 0 0.5rem;
+    color: var(--basari);
 }
 
 .basari dl {
@@ -92,36 +324,144 @@ button:focus-visible {
     margin: 0;
 }
 
+.basari dt {
+    color: var(--metin-soluk);
+}
+
 .basari dd {
     margin: 0;
-}
-
-/* Spec 0004: açık sekme (aria-current) ve listeler. */
-nav a[aria-current="page"] {
     font-weight: 600;
-    text-decoration: underline;
-    text-underline-offset: 0.3em;
 }
 
-main:has(table) {
-    max-width: 60rem;
+.bakiye {
+    display: inline-block;
+    margin: 0 0 1.25rem;
+    padding: 0.5rem 1rem;
+    color: var(--metin-soluk);
+    background: var(--yuzey-2);
+    border: 1px solid var(--cizgi);
+    border-radius: 999px;
+}
+
+.bakiye strong {
+    color: var(--pembe);
+}
+
+/* Ana sayfa */
+.roller {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.roller li {
+    padding: 0.3rem 0.85rem;
+    color: var(--mor);
+    background: var(--yuzey-2);
+    border: 1px solid var(--mor);
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+/* Tablolar: kendi kapsayıcısında kayar, sayfa yatay kaymaz (CB-5). */
+.tablo-kap {
+    overflow-x: auto;
 }
 
 table {
-    border-collapse: collapse;
     width: 100%;
+    border-collapse: collapse;
 }
 
 caption {
-    text-align: left;
+    padding-bottom: 0.75rem;
+    color: var(--metin-soluk);
     font-weight: 600;
-    padding-bottom: 0.5rem;
+    text-align: left;
 }
 
 th,
 td {
+    padding: 0.7rem 0.8rem;
     text-align: left;
-    padding: 0.4rem 0.6rem;
-    border-bottom: 1px solid #d0d7de;
     vertical-align: top;
+    border-bottom: 1px solid var(--cizgi);
+}
+
+th {
+    color: var(--metin-soluk);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+tbody tr:hover {
+    background: var(--yuzey-2);
+}
+
+/* Durum rozetleri (CB-4): metin durumun adıdır; renk ek ipucu. */
+.rozet {
+    display: inline-block;
+    padding: 0.15rem 0.65rem;
+    border: 1px solid currentcolor;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.rozet-beklemede {
+    color: var(--uyari);
+}
+
+.rozet-onaylandi {
+    color: var(--basari);
+}
+
+.rozet-reddedildi {
+    color: var(--hata);
+}
+
+.rozet-iptaledildi {
+    color: var(--notr);
+}
+
+.bos-durum {
+    margin: 0;
+    color: var(--metin-soluk);
+}
+
+/* Dar ekran (CB-5) */
+@media (max-width: 640px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-izgara {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    main button[type="submit"] {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
+}
+
+/* Yüksek kontrast / zorunlu renk modunda degrade metin okunur kalsın. */
+@media (forced-colors: active) {
+    .uygulama-adi {
+        color: CanvasText;
+        background: none;
+    }
 }

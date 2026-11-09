@@ -1,6 +1,6 @@
 # Spec 0005 — Modern arayüz ve koyu mavi–mor–pembe palet (mini)
 
-- Status: Approved
+- Status: In progress
 - Mode: lite
 - Plan: `specs/plans/0005-plan.md`
 - Source: kullanıcı talebi (sohbet, 2026-11-09): "ux / ui yapar mısın, modern kullanıcı arayüzü
