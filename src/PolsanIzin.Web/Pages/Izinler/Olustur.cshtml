@@ -35,16 +35,23 @@
     </div>
 }
 
-@if (Model.GenelHatalar.Count > 0)
+@if (Model.TalepAlinmadi)
 {
     <div class="hata-ozeti" role="alert" id="genel-hata">
-        <p>Talep alınmadı:</p>
-        <ul>
-            @foreach (var hata in Model.GenelHatalar)
-            {
-                <li>@hata</li>
-            }
-        </ul>
+        <p>Talep alınmadı.</p>
+        @if (Model.GenelHatalar.Count > 0)
+        {
+            <ul>
+                @foreach (var hata in Model.GenelHatalar)
+                {
+                    <li>@hata</li>
+                }
+            </ul>
+        }
+        @if (ViewData.ModelState.ErrorCount > 0)
+        {
+            <p>Lütfen işaretli alanlardaki hataları düzeltin.</p>
+        }
     </div>
 }
 

@@ -49,6 +49,9 @@ public sealed class OlusturModel(
 
     public List<string> GenelHatalar { get; } = [];
 
+    /// <summary>Gönderim reddedildi: form üstünde duyurulur (yalnızca alan hatası olsa da).</summary>
+    public bool TalepAlinmadi { get; private set; }
+
     public static string TurAdi(Tur tur) => Turler.First(t => t.Deger == tur).Ad;
 
     public static string TarihMetni(DateOnly tarih) => tarih.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture);
@@ -128,6 +131,7 @@ public sealed class OlusturModel(
 
     private void HatalariGoster(IEnumerable<Hata> hatalar, HashSet<string> bicimHatali)
     {
+        TalepAlinmadi = true;
         foreach (var hata in hatalar)
         {
             if (hata.Alan is null)

@@ -276,6 +276,10 @@ public sealed class IzinTalebiOlusturSayfasiTests : IDisposable
             Assert.NotNull(belge.GetElementById(hataId));
         }
 
+        // Yalnızca alan hatası olsa da ret form üstünde duyurulur (review 0001 K-6).
+        var ozet = belge.GetElementById("genel-hata");
+        Assert.Equal("alert", ozet?.GetAttribute("role"));
+        Assert.Contains("Talep alınmadı", ozet!.TextContent, StringComparison.Ordinal);
         Assert.Equal("true", belge.GetElementById("IzinTuru")!.GetAttribute("aria-invalid"));
         Assert.Equal("false", belge.GetElementById("Aciklama")!.GetAttribute("aria-invalid"));
         var form = Assert.Single(belge.QuerySelectorAll("main form"));
