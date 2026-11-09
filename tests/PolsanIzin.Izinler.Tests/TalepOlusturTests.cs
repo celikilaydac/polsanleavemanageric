@@ -214,6 +214,18 @@ public sealed class TalepOlusturTests : IDisposable
     }
 
     [Fact]
+    public async Task TalepOlustur_AciklamaCrlf_SatirSonuBirKarakterSayilir()
+    {
+        // Ekranda 500 karakter (satır sonu dahil); tarayıcı "\r\n" gönderdiği için ham hâli 501.
+        var aciklama = new string('a', 250) + "\r\n" + new string('b', 249);
+
+        var sonuc = await OlusturAsync(IzinTuru.Mazeret, T(11, 2), T(11, 2), aciklama);
+
+        Assert.True(sonuc.Basarili);
+        Assert.Equal(new string('a', 250) + "\n" + new string('b', 249), Db(db => db.IzinTalepleri.Single().Aciklama));
+    }
+
+    [Fact]
     public async Task TalepOlustur_Aciklama501_AlanHatasi()
     {
         var sonuc = await OlusturAsync(IzinTuru.Mazeret, T(11, 2), T(11, 2), new string('a', 501));

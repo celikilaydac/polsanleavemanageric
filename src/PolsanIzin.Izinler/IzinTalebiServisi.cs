@@ -35,6 +35,10 @@ internal sealed class IzinTalebiServisi(
 
     private async Task<Sonuc<TalepOzeti>> OlusturAsync(TalepOlusturKomutu komut, CancellationToken iptal)
     {
+        // Tarayıcı textarea satır sonlarını "\r\n" gönderir; ekrandaki karakter sayısıyla tutarlı
+        // olsun diye uzunluk ve saklanan metin "\n" ile hesaplanır (review 0001 K-4).
+        komut = komut with { Aciklama = komut.Aciklama?.ReplaceLineEndings("\n") };
+
         // Plan Risk 4: önce alan kuralları birlikte; temizse çakışma ve bakiye birlikte.
         var (hatalar, isGunu) = await AlanKurallariAsync(komut, iptal);
         if (hatalar.Count > 0)
