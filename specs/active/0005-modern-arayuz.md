@@ -24,7 +24,8 @@ koruyan bir görünüm. Davranış (akışlar, kurallar, metinler) değişmez; y
 - [ ] CB-4 — Talep durumu (Taleplerim) rozet olarak gösterilir; rozetin metni durumun Türkçe adıdır
   (renk yalnızca ek ipucudur).
 - [ ] CB-5 — İçerik kartlarda gösterilir; giriş ekranı ortalanmış tek kart; dar ekranda (≤ 640px)
-  form ve menü tek sütuna iner, sayfa yatay kaymaz (tablolar kendi kapsayıcısında kayar).
+  form tek sütuna iner, üst bar dikey yığılır (uygulama adı üstte, sekmeler altta ve satıra
+  sığmazsa sarılır), sayfa yatay kaymaz (tablolar kendi kapsayıcısında kayar).
 
 ## Preserved behavior
 - [ ] PB-1 — Spec 0002, 0001 ve 0004'ün kabul kriterlerini kanıtlayan testlerin tamamı değişmeden
